@@ -9,10 +9,11 @@ public class CameraController : MonoBehaviour
 
     //public float speed;
 
-    //void Start()
-    //{
-    //    target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-    //}
+    void Start()
+    {
+        //target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        print("teste");
+    }
 
     //void Update()
     //{
