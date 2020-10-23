@@ -2,37 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerEnvet : MonoBehaviour
+public class TriggerBinoculo : MonoBehaviour
 {
     //[SerializeField]
     //private GameObject feedbackTarget;
     [SerializeField]
-    private GameObject playerPC;
-    [SerializeField]
     private GameObject feedbackArrow;
 
+    [SerializeField]
+    private GameObject cameraBinoculo;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             //feedbackTarget.SetActive(true);
-            GameManager.Instance.ViewBtn("Aperte E para trabalhar no notebook.");
+            GameManager.Instance.ViewBtn("Aperte E para usar o binóculo.");
             feedbackArrow.SetActive(false);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(Input.GetKeyDown("e"))
+        if (Input.GetKeyDown("e"))
         {
-            if(other.GetComponent<Player>().GetCanMoving())
+            if (other.GetComponent<Player>().GetCanMoving())
             {
                 //feedbackTarget.SetActive(false);
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
                 other.GetComponent<Player>().SetCanMoving();
-                playerPC.SetActive(true);
+                cameraBinoculo.SetActive(true);
             }
             else
             {
@@ -40,7 +40,7 @@ public class TriggerEnvet : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
                 other.GetComponent<Player>().SetCanMoving();
-                playerPC.SetActive(false);
+                cameraBinoculo.SetActive(false);
             }
         }
     }
