@@ -2,37 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerEnvet : MonoBehaviour
+public class TriggerSofa : MonoBehaviour
 {
     //[SerializeField]
     //private GameObject feedbackTarget;
     [SerializeField]
-    private GameObject playerPC;
+    private GameObject playerSofa;
     [SerializeField]
     private GameObject feedbackArrow;
 
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             //feedbackTarget.SetActive(true);
-            GameManager.Instance.ViewBtn("Aperte E para trabalhar no notebook.");
+            GameManager.Instance.ViewBtn("Aperte E para sentar no sofá.");
             feedbackArrow.SetActive(false);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(Input.GetKeyDown("e"))
+        if (Input.GetKeyDown("e"))
         {
-            if(other.GetComponent<Player>().GetCanMoving())
+            if (other.GetComponent<Player>().GetCanMoving())
             {
                 //feedbackTarget.SetActive(false);
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
                 other.GetComponent<Player>().SetCanMoving();
-                playerPC.SetActive(true);
+                other.GetComponent<Player>().SetViewPlayer(false);
+                playerSofa.SetActive(true);
             }
             else
             {
@@ -40,7 +40,8 @@ public class TriggerEnvet : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
                 other.GetComponent<Player>().SetCanMoving();
-                playerPC.SetActive(false);
+                other.GetComponent<Player>().SetViewPlayer(true);
+                playerSofa.SetActive(false);
             }
         }
     }
