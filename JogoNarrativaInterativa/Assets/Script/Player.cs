@@ -12,6 +12,14 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private Animator anim;
+    [SerializeField]
+    private GameObject conjPlayer;
+
+    private float vertical;
+    private float horizontal;
+    private bool canMoving = true;
+
+    public int direction;
 
     private void Start()
     {
@@ -26,14 +34,48 @@ public class Player : MonoBehaviour
             playerVelocity.y = 0f;
         }
 
-        Vector3 move = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
-        controller.Move(move * Time.deltaTime * playerSpeed);
-        if (move != Vector3.zero)        
-            gameObject.transform.forward = move;
+        if(canMoving)
+        {
+            if (direction == 0)
+            {
+                vertical = -Input.GetAxis("Vertical");
+                horizontal = Input.GetAxis("Horizontal");
+            }
+            else if (direction == 1)
+            {
+                vertical = Input.GetAxis("Horizontal");
+                horizontal = Input.GetAxis("Vertical");
+            }
+            Vector3 move = new Vector3(vertical, 0, horizontal);
+            controller.Move(move * Time.deltaTime * playerSpeed);
+            if (move != Vector3.zero)
+            {
+                gameObject.transform.forward = move;
+            }
+        }
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
         anim.SetFloat("Speed", Input.GetAxis("Vertical") + Input.GetAxis("Horizontal"));
+    }
+
+    public void SetCanMoving()
+    {
+        canMoving = !canMoving;
+
+        if(canMoving)
+        {
+            conjPlayer.SetActive(true);
+        }
+        else
+        {
+            conjPlayer.SetActive(false);
+        }
+    }
+
+    public bool GetCanMoving()
+    {
+        return canMoving;
     }
 }
