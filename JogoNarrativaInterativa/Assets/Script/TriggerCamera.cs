@@ -6,7 +6,10 @@ public class TriggerCamera : MonoBehaviour
 {
     private GameObject mainCamera;
     [SerializeField]
-    private Transform target;    
+    private Transform target;
+
+    [SerializeField]
+    private int positionMove;
 
     private void Start()
     {
@@ -19,6 +22,8 @@ public class TriggerCamera : MonoBehaviour
         {
             mainCamera.transform.position = target.position;
             mainCamera.transform.rotation = target.rotation;
+
+            other.GetComponent<Player>().direction = positionMove;
         }
     }
 }
