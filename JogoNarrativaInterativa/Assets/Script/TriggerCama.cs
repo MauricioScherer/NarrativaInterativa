@@ -10,6 +10,8 @@ public class TriggerCama : MonoBehaviour
     private GameObject playerCama;
     [SerializeField]
     private GameObject feedbackArrow;
+    [SerializeField]
+    private AudioSource somAcordar;
 
     private bool podeDormir = false;
     private bool podeAcordar;
@@ -65,6 +67,7 @@ public class TriggerCama : MonoBehaviour
     {
         playerCama.SetActive(false);
         estaDormindo = false;
+        somAcordar.Play();
     }
 
     public bool GetEstaDormindo()

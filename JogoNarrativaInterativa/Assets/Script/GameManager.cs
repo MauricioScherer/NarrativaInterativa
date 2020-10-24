@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     private int dia = 0;
+    private int statusDia;
 
     [SerializeField]
     private AudioSource alarm;
@@ -74,6 +75,16 @@ public class GameManager : MonoBehaviour
             btnAcordar.SetActive(true);
         else
             btnAcordar.SetActive(false);
+    }
 
+    public void SetMissionResume(int p_status)
+    {
+        missoes[dia].GetComponent<MissaoDia>().SetMissionFinish(p_status);
+        statusDia = p_status;
+    }
+
+    public int GetStatusDia()
+    {
+        return statusDia;
     }
 }
