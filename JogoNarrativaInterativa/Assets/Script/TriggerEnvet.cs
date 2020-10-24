@@ -32,6 +32,7 @@ public class TriggerEnvet : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
                 other.GetComponent<Player>().SetCanMoving();
+                other.GetComponent<Player>().SetViewPlayer(false);
                 playerPC.SetActive(true);
             }
             else
@@ -40,6 +41,7 @@ public class TriggerEnvet : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
                 other.GetComponent<Player>().SetCanMoving();
+                other.GetComponent<Player>().SetViewPlayer(true);
                 playerPC.SetActive(false);
             }
         }

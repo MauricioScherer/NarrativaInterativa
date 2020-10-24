@@ -6,11 +6,19 @@ public class TriggerBinoculo : MonoBehaviour
 {
     //[SerializeField]
     //private GameObject feedbackTarget;
+    private GameObject mainCamera;
     [SerializeField]
     private GameObject feedbackArrow;
 
     [SerializeField]
-    private GameObject cameraBinoculo;
+    private Transform posCameraBinoculo;
+    [SerializeField]
+    private Transform posCameraSala;
+
+    private void Start()
+    {
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,7 +40,8 @@ public class TriggerBinoculo : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
                 other.GetComponent<Player>().SetCanMoving();
-                cameraBinoculo.SetActive(true);
+                mainCamera.transform.position = posCameraBinoculo.position;
+                mainCamera.transform.rotation = posCameraBinoculo.rotation;
             }
             else
             {
@@ -40,7 +49,8 @@ public class TriggerBinoculo : MonoBehaviour
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
                 other.GetComponent<Player>().SetCanMoving();
-                cameraBinoculo.SetActive(false);
+                mainCamera.transform.position = posCameraSala.position;
+                mainCamera.transform.rotation = posCameraSala.rotation;
             }
         }
     }

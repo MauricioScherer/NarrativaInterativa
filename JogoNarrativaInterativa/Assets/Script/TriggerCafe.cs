@@ -43,6 +43,7 @@ public class TriggerCafe : MonoBehaviour
         GameManager.Instance.ViewBtn("");
         feedbackArrow.SetActive(true);
         player.GetComponent<Player>().SetCanMoving();
+        GameManager.Instance.SetMissionResume(0);
     }
 
 

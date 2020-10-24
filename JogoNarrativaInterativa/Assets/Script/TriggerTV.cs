@@ -53,6 +53,7 @@ public class TriggerTV : MonoBehaviour
             {
                 if (currentFrame >= jornal.frameCount - 5)
                 {
+                    GameManager.Instance.SetMissionResume(2);
                     telaTv.clip = programacaoNormal;
                     telaTv.Play();
                     statusDia1++;
@@ -94,6 +95,7 @@ public class TriggerTV : MonoBehaviour
                     if(!startDia1)
                     {
                         telaTv.clip = propaganda;
+                        telaTv.frame = 700;
                         telaTv.Play();
                         startDia1 = true;
                     }
