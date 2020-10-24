@@ -8,9 +8,11 @@ public class TriggerTV : MonoBehaviour
     [SerializeField]
     public VideoPlayer telaTv;
     [SerializeField]
-    public MeshRenderer meshTV;
+    private AudioSource audioTv;
     [SerializeField]
-    private GameObject feedbackTarget;
+    public MeshRenderer meshTV;
+    //[SerializeField]
+    //private GameObject feedbackTarget;
     [SerializeField]
     private GameObject feedbackArrow;
 
@@ -25,7 +27,6 @@ public class TriggerTV : MonoBehaviour
     private bool startDia1;
     private int statusDia1;
     private bool finishDia1;
-
 
     private void Update()
     {
@@ -52,6 +53,7 @@ public class TriggerTV : MonoBehaviour
             {
                 if (currentFrame >= jornal.frameCount - 5)
                 {
+                    GameManager.Instance.SetMissionResume(2);
                     telaTv.clip = programacaoNormal;
                     telaTv.Play();
                     statusDia1++;
@@ -71,7 +73,8 @@ public class TriggerTV : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            feedbackTarget.SetActive(true);
+            //feedbackTarget.SetActive(true);
+            GameManager.Instance.ViewBtn("Aperte E para ligar ou desligar a TV.");
             feedbackArrow.SetActive(false);
         }
     }
@@ -81,8 +84,10 @@ public class TriggerTV : MonoBehaviour
         {
             if (!tvOn)
             {
-                feedbackTarget.SetActive(false);
+                //feedbackTarget.SetActive(false);
+                GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
+                audioTv.volume = 0.5f;
                 tvOn = true;
 
                 if(dia == 1)
@@ -90,6 +95,7 @@ public class TriggerTV : MonoBehaviour
                     if(!startDia1)
                     {
                         telaTv.clip = propaganda;
+                        telaTv.frame = 700;
                         telaTv.Play();
                         startDia1 = true;
                     }
@@ -97,8 +103,10 @@ public class TriggerTV : MonoBehaviour
             }
             else
             {
-                feedbackTarget.SetActive(false);
+                //feedbackTarget.SetActive(false);
+                GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
+                audioTv.volume = 0.0f;
                 tvOn = false;
             }
             meshTV.enabled = tvOn;
@@ -108,7 +116,8 @@ public class TriggerTV : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            feedbackTarget.SetActive(false);
+            //feedbackTarget.SetActive(false);
+            GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
         }
     }

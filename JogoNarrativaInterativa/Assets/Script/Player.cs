@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 
     private float vertical;
     private float horizontal;
-    private bool canMoving = true;
+    private bool canMoving = false;
 
     public int direction;
 
@@ -63,15 +63,11 @@ public class Player : MonoBehaviour
     public void SetCanMoving()
     {
         canMoving = !canMoving;
+    }
 
-        if(canMoving)
-        {
-            conjPlayer.SetActive(true);
-        }
-        else
-        {
-            conjPlayer.SetActive(false);
-        }
+    public void SetViewPlayer(bool p_status)
+    {
+        conjPlayer.SetActive(p_status);
     }
 
     public bool GetCanMoving()

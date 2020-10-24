@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TriggerEnvet : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject feedbackTarget;
+    //[SerializeField]
+    //private GameObject feedbackTarget;
     [SerializeField]
     private GameObject playerPC;
     [SerializeField]
@@ -16,7 +16,8 @@ public class TriggerEnvet : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            feedbackTarget.SetActive(true);
+            //feedbackTarget.SetActive(true);
+            GameManager.Instance.ViewBtn("Aperte E para trabalhar no notebook.");
             feedbackArrow.SetActive(false);
         }
     }
@@ -27,16 +28,20 @@ public class TriggerEnvet : MonoBehaviour
         {
             if(other.GetComponent<Player>().GetCanMoving())
             {
-                feedbackTarget.SetActive(false);
+                //feedbackTarget.SetActive(false);
+                GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(false);
                 other.GetComponent<Player>().SetCanMoving();
+                other.GetComponent<Player>().SetViewPlayer(false);
                 playerPC.SetActive(true);
             }
             else
             {
-                feedbackTarget.SetActive(false);
+                //feedbackTarget.SetActive(false);
+                GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
                 other.GetComponent<Player>().SetCanMoving();
+                other.GetComponent<Player>().SetViewPlayer(true);
                 playerPC.SetActive(false);
             }
         }
@@ -46,7 +51,8 @@ public class TriggerEnvet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            feedbackTarget.SetActive(false);
+            //feedbackTarget.SetActive(false);
+            GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
         }
     }
