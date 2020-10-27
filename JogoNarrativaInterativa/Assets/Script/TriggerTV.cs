@@ -11,10 +11,10 @@ public class TriggerTV : MonoBehaviour
     private AudioSource audioTv;
     [SerializeField]
     public MeshRenderer meshTV;
-    //[SerializeField]
-    //private GameObject feedbackTarget;
     [SerializeField]
     private GameObject feedbackArrow;
+
+    private bool _stayTrigger;
 
     [Header("Dia 1")]
     public VideoClip propaganda;
@@ -31,7 +31,7 @@ public class TriggerTV : MonoBehaviour
     private void Update()
     {
         StartTvDia1();
-
+        StayTrigger();
     }
 
     public void StartTvDia1()
@@ -73,52 +73,65 @@ public class TriggerTV : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(true);
+            _stayTrigger = true;
             GameManager.Instance.ViewBtn("Aperte E para ligar ou desligar a TV.");
             feedbackArrow.SetActive(false);
         }
     }
-    private void OnTriggerStay(Collider other)
-    {
-        if (Input.GetKeyDown("e"))
-        {
-            if (!tvOn)
-            {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(false);
-                audioTv.volume = 0.5f;
-                tvOn = true;
 
-                if(dia == 1)
+    private void StayTrigger()
+    {
+        if(_stayTrigger)
+        {
+            if (Input.GetKeyDown("e"))
+            {
+                if (!tvOn)
                 {
-                    if(!startDia1)
+                    //feedbackTarget.SetActive(false);
+                    GameManager.Instance.ViewBtn("");
+                    feedbackArrow.SetActive(false);
+                    audioTv.volume = 0.3f;
+                    tvOn = true;
+
+                    if (dia == 1)
                     {
-                        telaTv.clip = propaganda;
-                        telaTv.frame = 700;
-                        telaTv.Play();
-                        startDia1 = true;
+                        if (!startDia1)
+                        {
+                            telaTv.clip = propaganda;
+                            telaTv.frame = 700;
+                            telaTv.Play();
+                            startDia1 = true;
+                        }
                     }
                 }
+                else
+                {
+                    DesligarTv();
+                }
+                meshTV.enabled = tvOn;
             }
-            else
-            {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
-                audioTv.volume = 0.0f;
-                tvOn = false;
-            }
-            meshTV.enabled = tvOn;
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(false);
+            _stayTrigger = false;
             GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
+        }
+    }
+
+    public void DesligarTv()
+    {
+        if(tvOn)
+        {
+            GameManager.Instance.ViewBtn("");
+            feedbackArrow.SetActive(true);
+            audioTv.volume = 0.0f;
+            tvOn = false;
+            meshTV.enabled = tvOn;
         }
     }
 }

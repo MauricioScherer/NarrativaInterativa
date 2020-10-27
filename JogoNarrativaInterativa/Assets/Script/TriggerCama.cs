@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TriggerCama : MonoBehaviour
 {
-    //[SerializeField]
-    //private GameObject feedbackTarget;
+    private bool _stayTrigger;
+    private GameObject player;
+
     [SerializeField]
     private GameObject playerCama;
     [SerializeField]
@@ -17,34 +18,44 @@ public class TriggerCama : MonoBehaviour
     private bool podeAcordar;
     private bool estaDormindo = true;
 
+    private void Update()
+    {
+        StayTrigger();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if(podeDormir)
+            player = other.gameObject;
+
+            if (podeDormir)
             {
-                //feedbackTarget.SetActive(true);
+                _stayTrigger = true;
                 GameManager.Instance.ViewBtn("Aperte E para dormir.");
                 feedbackArrow.SetActive(false);
             }
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void StayTrigger()
     {
-        if (Input.GetKeyDown("e"))
+        if(_stayTrigger)
         {
-            if (other.GetComponent<Player>().GetCanMoving())
+            if (Input.GetKeyDown("e"))
             {
-                if(podeDormir)
+                if (player.GetComponent<Player>().GetCanMoving())
                 {
-                    //feedbackTarget.SetActive(false);
-                    GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(false);
-                    other.GetComponent<Player>().SetCanMoving();
-                    other.GetComponent<Player>().SetViewPlayer(false);
-                    playerCama.SetActive(true);
-                    estaDormindo = true;
+                    if (podeDormir)
+                    {
+                        GameManager.Instance.ViewBtn("");
+                        GameManager.Instance.FinishDia1();
+                        feedbackArrow.SetActive(false);
+                        player.GetComponent<Player>().SetCanMoving();
+                        player.GetComponent<Player>().SetViewPlayer(false);
+                        playerCama.SetActive(true);
+                        estaDormindo = true;
+                    }
                 }
             }
         }
@@ -56,10 +67,10 @@ public class TriggerCama : MonoBehaviour
         {
             if(podeDormir)
             {
-                //feedbackTarget.SetActive(false);
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
             }
+            _stayTrigger = false;
         }
     }
 
@@ -68,6 +79,11 @@ public class TriggerCama : MonoBehaviour
         playerCama.SetActive(false);
         estaDormindo = false;
         somAcordar.Play();
+    }
+
+    public void SetPodeDormir(bool p_status)
+    {
+        podeDormir = p_status;
     }
 
     public bool GetEstaDormindo()

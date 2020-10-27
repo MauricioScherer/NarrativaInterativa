@@ -4,44 +4,54 @@ using UnityEngine;
 
 public class TriggerSofa : MonoBehaviour
 {
-    //[SerializeField]
-    //private GameObject feedbackTarget;
+    private bool _staytrigger;
+    private GameObject player;
+
     [SerializeField]
     private GameObject playerSofa;
     [SerializeField]
     private GameObject feedbackArrow;
 
+    private void Update()
+    {
+        StayTrigger();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(true);
+            _staytrigger = true;
+            player = other.gameObject;
             GameManager.Instance.ViewBtn("Aperte E para sentar no sofá.");
             feedbackArrow.SetActive(false);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void StayTrigger()
     {
-        if (Input.GetKeyDown("e"))
+        if(_staytrigger)
         {
-            if (other.GetComponent<Player>().GetCanMoving())
+            if (Input.GetKeyDown("e"))
             {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(false);
-                other.GetComponent<Player>().SetCanMoving();
-                other.GetComponent<Player>().SetViewPlayer(false);
-                playerSofa.SetActive(true);
-            }
-            else
-            {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
-                other.GetComponent<Player>().SetCanMoving();
-                other.GetComponent<Player>().SetViewPlayer(true);
-                playerSofa.SetActive(false);
+                if (player.GetComponent<Player>().GetCanMoving())
+                {
+                    //feedbackTarget.SetActive(false);
+                    GameManager.Instance.ViewBtn("");
+                    feedbackArrow.SetActive(false);
+                    player.GetComponent<Player>().SetCanMoving();
+                    player.GetComponent<Player>().SetViewPlayer(false);
+                    playerSofa.SetActive(true);
+                }
+                else
+                {
+                    //feedbackTarget.SetActive(false);
+                    GameManager.Instance.ViewBtn("");
+                    feedbackArrow.SetActive(true);
+                    player.GetComponent<Player>().SetCanMoving();
+                    player.GetComponent<Player>().SetViewPlayer(true);
+                    playerSofa.SetActive(false);
+                }
             }
         }
     }
@@ -50,7 +60,8 @@ public class TriggerSofa : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(false);
+            _staytrigger = false;
+
             GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
         }

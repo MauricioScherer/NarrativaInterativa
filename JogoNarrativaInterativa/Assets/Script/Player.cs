@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private Animator anim;
     [SerializeField]
     private GameObject conjPlayer;
+    [SerializeField]
+    private AudioSource step;
 
     private float vertical;
     private float horizontal;
@@ -58,6 +60,15 @@ public class Player : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
 
         anim.SetFloat("Speed", Input.GetAxis("Vertical") + Input.GetAxis("Horizontal"));
+
+        if(anim.GetFloat("Speed") != 0 && !step.isPlaying)
+        {
+            step.Play();
+        }
+        else if(anim.GetFloat("Speed") == 0 && step.isPlaying)
+        {
+            step.Stop();
+        }
     }
 
     public void SetCanMoving()

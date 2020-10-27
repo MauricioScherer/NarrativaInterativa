@@ -4,45 +4,52 @@ using UnityEngine;
 
 public class TriggerEnvet : MonoBehaviour
 {
-    //[SerializeField]
-    //private GameObject feedbackTarget;
+    private bool _stayTrigger;
+    private GameObject player;
+
     [SerializeField]
     private GameObject playerPC;
     [SerializeField]
     private GameObject feedbackArrow;
 
+    private void Update()
+    {
+        StayTrigger();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(true);
+            _stayTrigger = true;
+            player = other.gameObject;
             GameManager.Instance.ViewBtn("Aperte E para trabalhar no notebook.");
             feedbackArrow.SetActive(false);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void StayTrigger()
     {
-        if(Input.GetKeyDown("e"))
+        if(_stayTrigger)
         {
-            if(other.GetComponent<Player>().GetCanMoving())
+            if (Input.GetKeyDown("e"))
             {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(false);
-                other.GetComponent<Player>().SetCanMoving();
-                other.GetComponent<Player>().SetViewPlayer(false);
-                playerPC.SetActive(true);
-            }
-            else
-            {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
-                other.GetComponent<Player>().SetCanMoving();
-                other.GetComponent<Player>().SetViewPlayer(true);
-                playerPC.SetActive(false);
+                if (player.GetComponent<Player>().GetCanMoving())
+                {
+                    GameManager.Instance.ViewBtn("");
+                    feedbackArrow.SetActive(false);
+                    player.GetComponent<Player>().SetCanMoving();
+                    player.GetComponent<Player>().SetViewPlayer(false);
+                    playerPC.SetActive(true);
+                }
+                else
+                {
+                    GameManager.Instance.ViewBtn("");
+                    feedbackArrow.SetActive(true);
+                    player.GetComponent<Player>().SetCanMoving();
+                    player.GetComponent<Player>().SetViewPlayer(true);
+                    playerPC.SetActive(false);
+                }
             }
         }
     }
@@ -51,7 +58,7 @@ public class TriggerEnvet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(false);
+            _stayTrigger = false;
             GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
         }

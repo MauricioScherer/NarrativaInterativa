@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class TriggerPia : MonoBehaviour
 {
-    //[SerializeField]
-    //private GameObject feedbackTarget;
+    private bool _stayTrigger;
+
     [SerializeField]
     private GameObject feedbackArrow;
     [SerializeField]
@@ -33,13 +33,14 @@ public class TriggerPia : MonoBehaviour
                 FinishingProgress();
             }
         }
+
+        StayTrigger();
     }
 
     private void FinishingProgress()
     {
         progressoFinish = true;
         progresso.SetActive(false);
-        //feedbackTarget.SetActive(false);
         GameManager.Instance.ViewBtn("");
         feedbackArrow.SetActive(true);
         player.GetComponent<Player>().SetCanMoving();
@@ -51,38 +52,40 @@ public class TriggerPia : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if(!progressoFinish)
+            player = other.gameObject;
+
+            if (!progressoFinish)
             {
-                //feedbackTarget.SetActive(true);
+                _stayTrigger = true;
                 GameManager.Instance.ViewBtn("Aperte E para escovar os dentes.");
                 feedbackArrow.SetActive(false);
             }
         }
     }
-    private void OnTriggerStay(Collider other)
+
+    private void StayTrigger()
     {
-        if (Input.GetKeyDown("e"))
+        if(_stayTrigger)
         {
-            if(!progressoFinish)
+            if (Input.GetKeyDown("e"))
             {
-                if (other.GetComponent<Player>().GetCanMoving())
+                if (!progressoFinish)
                 {
-                    progresso.SetActive(true);
-                    //feedbackTarget.SetActive(false);
-                    GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(false);
-                    player = other.gameObject;
-                    other.GetComponent<Player>().SetCanMoving();
-                }
-                else
-                {
-                    progressBar.fillAmount = 0.0f;
-                    progresso.SetActive(false);
-                    //feedbackTarget.SetActive(false);
-                    GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(true);
-                    player = null;
-                    other.GetComponent<Player>().SetCanMoving();
+                    if (player.GetComponent<Player>().GetCanMoving())
+                    {
+                        progresso.SetActive(true);
+                        GameManager.Instance.ViewBtn("");
+                        feedbackArrow.SetActive(false);
+                        player.GetComponent<Player>().SetCanMoving();
+                    }
+                    else
+                    {
+                        progressBar.fillAmount = 0.0f;
+                        progresso.SetActive(false);
+                        GameManager.Instance.ViewBtn("");
+                        feedbackArrow.SetActive(true);
+                        player.GetComponent<Player>().SetCanMoving();
+                    }
                 }
             }
         }
@@ -93,10 +96,10 @@ public class TriggerPia : MonoBehaviour
         {
             if(!progressoFinish)
             {
-                //feedbackTarget.SetActive(false);
                 GameManager.Instance.ViewBtn("");
                 feedbackArrow.SetActive(true);
             }
+            _stayTrigger = false;
         }
     }
 
