@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     private int dia = 0;
     private int statusDia;
+    private bool startDia;
 
     [SerializeField]
     private AudioSource alarm;
@@ -19,11 +20,21 @@ public class GameManager : MonoBehaviour
     private Light lampadaQuarto;
     [SerializeField]
     private Text feedText;
+    [SerializeField]
+    private GameObject lenteBinoculo;
+    [SerializeField]
+    private GameObject finalDia;
 
     [Header("Player")]
     public Player player;
-    [Header("TriggetCama")]
+    [Header("TriggerCama")]
     public TriggerCama triggerCama;
+    [Header("TriggerCama")]
+    public TriggerCafe triggerCafe;
+    [Header("TriggerBanheiro")]
+    public TriggerPia triggerBanheiro;
+    [Header("TriggerTv")]
+    public TriggerTV triggerTv;
 
     [Header("Missoes")]
     public GameObject[] missoes;
@@ -36,7 +47,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //iniciar o ciclo para o dia 1
-        Invoke("StartDia1", 10.0f);
+        Invoke("StartDia1", 5.0f);
     }
 
     void Update()
@@ -44,7 +55,7 @@ public class GameManager : MonoBehaviour
         switch(dia)
         { 
             case 0:
-                if(Input.GetKeyDown("e") && triggerCama.GetEstaDormindo())
+                if(Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
                 {
                     alarm.Stop();
                     btnAcordar.SetActive(false);
@@ -64,7 +75,25 @@ public class GameManager : MonoBehaviour
         alarm.Play();
         btnAcordar.SetActive(true);
         missoes[dia].SetActive(true);
-
+        startDia = true;
+    }
+    public void StartDia1parte2()
+    {
+        triggerCama.SetPodeDormir(true);
+        triggerCafe.SetProgressFinish(false);
+        triggerBanheiro.SetProgressFinish(false);
+        missoes[0].GetComponent<MissaoDia>().MissionDia1Parte2();
+    }
+    public void FinishDia1()
+    {
+        if(startDia)
+        {
+            triggerTv.DesligarTv();
+            lampadaQuarto.enabled = false;
+            startDia = false;
+            missoes[0].SetActive(false);
+            finalDia.SetActive(true);
+        }
     }
 
     public void ViewBtn(string p_text)
@@ -80,11 +109,21 @@ public class GameManager : MonoBehaviour
     public void SetMissionResume(int p_status)
     {
         missoes[dia].GetComponent<MissaoDia>().SetMissionFinish(p_status);
-        statusDia = p_status;
+        statusDia++;
     }
 
     public int GetStatusDia()
     {
         return statusDia;
+    }
+
+    public void ViewLenteBinoculo(bool p_status)
+    {
+        lenteBinoculo.SetActive(p_status);
+    }
+
+    public void DesligarTvDireto()
+    {
+        triggerTv.DesligarTv();
     }
 }

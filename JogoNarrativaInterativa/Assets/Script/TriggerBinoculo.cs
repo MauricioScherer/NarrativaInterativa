@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TriggerBinoculo : MonoBehaviour
 {
-    //[SerializeField]
-    //private GameObject feedbackTarget;
     private GameObject mainCamera;
+    private GameObject player;
+    private bool _stayTrigger;
     [SerializeField]
     private GameObject feedbackArrow;
 
@@ -20,37 +20,52 @@ public class TriggerBinoculo : MonoBehaviour
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
+    private void Update()
+    {
+        Staytrigger();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(true);
+            player = other.gameObject;
+            _stayTrigger = true;
             GameManager.Instance.ViewBtn("Aperte E para usar o binóculo.");
             feedbackArrow.SetActive(false);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void Staytrigger()
     {
-        if (Input.GetKeyDown("e"))
+        if(_stayTrigger)
         {
-            if (other.GetComponent<Player>().GetCanMoving())
+            if (Input.GetKeyDown("e"))
             {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(false);
-                other.GetComponent<Player>().SetCanMoving();
-                mainCamera.transform.position = posCameraBinoculo.position;
-                mainCamera.transform.rotation = posCameraBinoculo.rotation;
-            }
-            else
-            {
-                //feedbackTarget.SetActive(false);
-                GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
-                other.GetComponent<Player>().SetCanMoving();
-                mainCamera.transform.position = posCameraSala.position;
-                mainCamera.transform.rotation = posCameraSala.rotation;
+                if (player.GetComponent<Player>().GetCanMoving())
+                {
+                    GameManager.Instance.ViewBtn("");
+                    GameManager.Instance.ViewLenteBinoculo(true);
+                    feedbackArrow.SetActive(false);
+                    player.GetComponent<Player>().SetCanMoving();
+                    mainCamera.transform.position = posCameraBinoculo.position;
+                    mainCamera.transform.localRotation = posCameraBinoculo.localRotation;
+
+                    mainCamera.GetComponent<Camera>().fieldOfView = 20.0f;
+                    mainCamera.GetComponent<Binoculo>().enabled = true;
+                }
+                else
+                {
+                    GameManager.Instance.ViewBtn("");
+                    GameManager.Instance.ViewLenteBinoculo(false);
+                    feedbackArrow.SetActive(true);
+                    player.GetComponent<Player>().SetCanMoving();
+                    mainCamera.transform.position = posCameraSala.position;
+                    mainCamera.transform.rotation = posCameraSala.rotation;
+
+                    mainCamera.GetComponent<Camera>().fieldOfView = 60.0f;
+                    mainCamera.GetComponent<Binoculo>().enabled = false;
+                }
             }
         }
     }
@@ -59,7 +74,7 @@ public class TriggerBinoculo : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //feedbackTarget.SetActive(false);
+            _stayTrigger = false;
             GameManager.Instance.ViewBtn("");
             feedbackArrow.SetActive(true);
         }
