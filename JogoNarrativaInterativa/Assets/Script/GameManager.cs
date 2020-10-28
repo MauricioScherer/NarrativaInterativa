@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private int statusDia;
     private bool startDia;
 
+    private bool quarentena;
+
     [SerializeField]
     private AudioSource alarm;
     [SerializeField]
@@ -24,20 +26,27 @@ public class GameManager : MonoBehaviour
     private GameObject lenteBinoculo;
     [SerializeField]
     private GameObject finalDia;
+    [SerializeField]
+    private GameObject sonoSofa;
 
     [Header("Player")]
     public Player player;
     [Header("TriggerCama")]
     public TriggerCama triggerCama;
-    [Header("TriggerCama")]
+    [Header("TriggerCafe")]
     public TriggerCafe triggerCafe;
     [Header("TriggerBanheiro")]
     public TriggerPia triggerBanheiro;
     [Header("TriggerTv")]
     public TriggerTV triggerTv;
+    [Header("TriggerSofa")]
+    public TriggerSofa triggerSofa;
 
     [Header("Missoes")]
     public GameObject[] missoes;
+
+    [Header("LuzesCasa")]
+    public Light[] lights;
 
     private void Awake()
     {
@@ -56,6 +65,17 @@ public class GameManager : MonoBehaviour
         { 
             case 0:
                 if(Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
+                {
+                    alarm.Stop();
+                    btnAcordar.SetActive(false);
+                    triggerCama.Acordar();
+                    player.SetCanMoving();
+                    player.SetViewPlayer(true);
+                    lampadaQuarto.enabled = true;
+                }
+                break;
+            case 1:
+                if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
                 {
                     alarm.Stop();
                     btnAcordar.SetActive(false);
@@ -96,6 +116,39 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartDia2()
+    {
+        alarm.Play();
+        finalDia.SetActive(false);
+        dia = 1;
+        btnAcordar.SetActive(true);
+        missoes[dia].SetActive(true);
+        startDia = true;
+        triggerCama.SetPodeDormir(false);
+        triggerCafe.SetProgressFinish(false);
+        triggerBanheiro.SetProgressFinish(false);
+        triggerTv.ResetDia();
+        ViewBtn("Aperte 'E' para acordar.");
+        statusDia = 0;
+    }
+    public void StartDia2Parte2()
+    {
+        missoes[dia].GetComponent<MissaoDia>().MissionDia2Parte2();
+        quarentena = true;
+
+        if (triggerSofa.GetStaySofa())
+        {
+            StartSonoSofa();
+            print("dispara o evento para dormindo");
+        }
+    }
+
+    public void StartSonoSofa()
+    {
+        statusDia = 1;
+        sonoSofa.SetActive(true);
+    }
+
     public void ViewBtn(string p_text)
     {
         feedText.text = p_text;
@@ -117,6 +170,16 @@ public class GameManager : MonoBehaviour
         return statusDia;
     }
 
+    public int GetDiaCurrent()
+    {
+        return dia;
+    }
+
+    public bool GetQuarentena()
+    {
+        return quarentena;
+    }
+
     public void ViewLenteBinoculo(bool p_status)
     {
         lenteBinoculo.SetActive(p_status);
@@ -125,5 +188,17 @@ public class GameManager : MonoBehaviour
     public void DesligarTvDireto()
     {
         triggerTv.DesligarTv();
+    }
+
+    public void SetStatusLights(bool p_status)
+    {
+        foreach (Light obj in lights)
+            obj.enabled = p_status;
+
+        if(!p_status)
+        {
+            triggerTv.DesligarTv();
+            triggerTv.GetComponent<BoxCollider>().enabled = false;
+        }
     }
 }

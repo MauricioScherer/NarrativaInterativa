@@ -33,7 +33,7 @@ public class TriggerCama : MonoBehaviour
             {
                 _stayTrigger = true;
                 GameManager.Instance.ViewBtn("Aperte E para dormir.");
-                feedbackArrow.SetActive(false);
+                //feedbackArrow.SetActive(false);
             }
         }
     }
@@ -50,7 +50,7 @@ public class TriggerCama : MonoBehaviour
                     {
                         GameManager.Instance.ViewBtn("");
                         GameManager.Instance.FinishDia1();
-                        feedbackArrow.SetActive(false);
+                        //feedbackArrow.SetActive(false);
                         player.GetComponent<Player>().SetCanMoving();
                         player.GetComponent<Player>().SetViewPlayer(false);
                         playerCama.SetActive(true);
@@ -68,7 +68,7 @@ public class TriggerCama : MonoBehaviour
             if(podeDormir)
             {
                 GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
+                //feedbackArrow.SetActive(true);
             }
             _stayTrigger = false;
         }

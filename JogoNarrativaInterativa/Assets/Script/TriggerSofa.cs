@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TriggerSofa : MonoBehaviour
 {
+    private bool _staySofa;
     private bool _staytrigger;
     private GameObject player;
 
@@ -24,7 +25,7 @@ public class TriggerSofa : MonoBehaviour
             _staytrigger = true;
             player = other.gameObject;
             GameManager.Instance.ViewBtn("Aperte E para sentar no sofá.");
-            feedbackArrow.SetActive(false);
+            //feedbackArrow.SetActive(false);
         }
     }
 
@@ -38,19 +39,27 @@ public class TriggerSofa : MonoBehaviour
                 {
                     //feedbackTarget.SetActive(false);
                     GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(false);
+                    //feedbackArrow.SetActive(false);
                     player.GetComponent<Player>().SetCanMoving();
                     player.GetComponent<Player>().SetViewPlayer(false);
                     playerSofa.SetActive(true);
+                    _staySofa = true;
+
+                    if(GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetQuarentena())
+                    {
+                        GameManager.Instance.StartSonoSofa();
+                        print("dispara o evento para dormindo");
+                    }
                 }
                 else
                 {
                     //feedbackTarget.SetActive(false);
                     GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(true);
+                    //feedbackArrow.SetActive(true);
                     player.GetComponent<Player>().SetCanMoving();
                     player.GetComponent<Player>().SetViewPlayer(true);
                     playerSofa.SetActive(false);
+                    _staySofa = false;
                 }
             }
         }
@@ -63,7 +72,12 @@ public class TriggerSofa : MonoBehaviour
             _staytrigger = false;
 
             GameManager.Instance.ViewBtn("");
-            feedbackArrow.SetActive(true);
+            //feedbackArrow.SetActive(true);
         }
+    }
+
+    public bool GetStaySofa()
+    {
+        return _staySofa;
     }
 }
