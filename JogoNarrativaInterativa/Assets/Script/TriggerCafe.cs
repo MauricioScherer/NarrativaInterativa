@@ -12,6 +12,10 @@ public class TriggerCafe : MonoBehaviour
     private GameObject progresso;
     [SerializeField]
     private Image progressBar;
+    [SerializeField]
+    private AudioSource inputSound;
+    [SerializeField]
+    private AudioClip[] clips;
 
     private GameObject player;
     private bool progressoFinish;
@@ -24,7 +28,8 @@ public class TriggerCafe : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                progressBar.fillAmount += 0.1f;
+                inputSound.Play();
+                progressBar.fillAmount += 0.12f;
             }
 
             if (progressBar.fillAmount >= 0.95f)
@@ -38,12 +43,14 @@ public class TriggerCafe : MonoBehaviour
 
     private void FinishingProgress()
     {
+        inputSound.clip = clips[1];
+        inputSound.Play();
         progressoFinish = true;
         progresso.SetActive(false);
         GameManager.Instance.ViewBtn("");
-        feedbackArrow.SetActive(true);
         player.GetComponent<Player>().SetCanMoving();
         GameManager.Instance.SetMissionResume(0);
+        progressBar.fillAmount = 0.0f;
     }
 
 
@@ -57,7 +64,6 @@ public class TriggerCafe : MonoBehaviour
             {
                 _stayTrigger = true;
                 GameManager.Instance.ViewBtn("Aperte E para tomar café");
-                feedbackArrow.SetActive(false);
             }
         }
     }
@@ -74,7 +80,7 @@ public class TriggerCafe : MonoBehaviour
                     {
                         progresso.SetActive(true);
                         GameManager.Instance.ViewBtn("");
-                        feedbackArrow.SetActive(false);
+                        inputSound.clip = clips[0];
                         player.GetComponent<Player>().SetCanMoving();
                     }
                     else
@@ -82,7 +88,6 @@ public class TriggerCafe : MonoBehaviour
                         progressBar.fillAmount = 0.0f;
                         progresso.SetActive(false);
                         GameManager.Instance.ViewBtn("");
-                        feedbackArrow.SetActive(true);
                         player.GetComponent<Player>().SetCanMoving();
                     }
                 }
@@ -97,7 +102,7 @@ public class TriggerCafe : MonoBehaviour
             if (!progressoFinish)
             {
                 GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
+                //feedbackArrow.SetActive(true);
             }
             _stayTrigger = false;
         }

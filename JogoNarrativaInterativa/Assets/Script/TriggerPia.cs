@@ -13,6 +13,10 @@ public class TriggerPia : MonoBehaviour
     private GameObject progresso;
     [SerializeField]
     private Image progressBar;
+    [SerializeField]
+    private AudioSource inputSound;
+    [SerializeField]
+    private AudioClip[] clips;
 
     private GameObject player;
     private bool progressoFinish;
@@ -25,7 +29,8 @@ public class TriggerPia : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                progressBar.fillAmount += 0.1f;
+                inputSound.Play();
+                progressBar.fillAmount += 0.12f;
             }
 
             if(progressBar.fillAmount >= 0.95f)
@@ -39,12 +44,14 @@ public class TriggerPia : MonoBehaviour
 
     private void FinishingProgress()
     {
+        inputSound.clip = clips[1];
+        inputSound.Play();
         progressoFinish = true;
         progresso.SetActive(false);
         GameManager.Instance.ViewBtn("");
-        feedbackArrow.SetActive(true);
         player.GetComponent<Player>().SetCanMoving();
         GameManager.Instance.SetMissionResume(1);
+        progressBar.fillAmount = 0.0f;
     }
 
 
@@ -58,7 +65,6 @@ public class TriggerPia : MonoBehaviour
             {
                 _stayTrigger = true;
                 GameManager.Instance.ViewBtn("Aperte E para escovar os dentes.");
-                feedbackArrow.SetActive(false);
             }
         }
     }
@@ -75,7 +81,7 @@ public class TriggerPia : MonoBehaviour
                     {
                         progresso.SetActive(true);
                         GameManager.Instance.ViewBtn("");
-                        feedbackArrow.SetActive(false);
+                        inputSound.clip = clips[0];
                         player.GetComponent<Player>().SetCanMoving();
                     }
                     else
@@ -83,7 +89,6 @@ public class TriggerPia : MonoBehaviour
                         progressBar.fillAmount = 0.0f;
                         progresso.SetActive(false);
                         GameManager.Instance.ViewBtn("");
-                        feedbackArrow.SetActive(true);
                         player.GetComponent<Player>().SetCanMoving();
                     }
                 }
@@ -97,7 +102,6 @@ public class TriggerPia : MonoBehaviour
             if(!progressoFinish)
             {
                 GameManager.Instance.ViewBtn("");
-                feedbackArrow.SetActive(true);
             }
             _stayTrigger = false;
         }

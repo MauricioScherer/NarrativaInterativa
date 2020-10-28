@@ -32,7 +32,7 @@ public class TriggerBinoculo : MonoBehaviour
             player = other.gameObject;
             _stayTrigger = true;
             GameManager.Instance.ViewBtn("Aperte E para usar o binóculo.");
-            feedbackArrow.SetActive(false);
+            //feedbackArrow.SetActive(false);
         }
     }
 
@@ -46,7 +46,7 @@ public class TriggerBinoculo : MonoBehaviour
                 {
                     GameManager.Instance.ViewBtn("");
                     GameManager.Instance.ViewLenteBinoculo(true);
-                    feedbackArrow.SetActive(false);
+                    //feedbackArrow.SetActive(false);
                     player.GetComponent<Player>().SetCanMoving();
                     mainCamera.transform.position = posCameraBinoculo.position;
                     mainCamera.transform.localRotation = posCameraBinoculo.localRotation;
@@ -58,7 +58,7 @@ public class TriggerBinoculo : MonoBehaviour
                 {
                     GameManager.Instance.ViewBtn("");
                     GameManager.Instance.ViewLenteBinoculo(false);
-                    feedbackArrow.SetActive(true);
+                    //feedbackArrow.SetActive(true);
                     player.GetComponent<Player>().SetCanMoving();
                     mainCamera.transform.position = posCameraSala.position;
                     mainCamera.transform.rotation = posCameraSala.rotation;
@@ -76,7 +76,7 @@ public class TriggerBinoculo : MonoBehaviour
         {
             _stayTrigger = false;
             GameManager.Instance.ViewBtn("");
-            feedbackArrow.SetActive(true);
+            //feedbackArrow.SetActive(true);
         }
     }
 }

@@ -17,16 +17,16 @@ public class TriggerTV : MonoBehaviour
     private bool _stayTrigger;
 
     [Header("Dia 1")]
-    public VideoClip propaganda;
-    public VideoClip jornal;
-    public VideoClip programacaoNormal;
+    public VideoClip[] propaganda;
+    public VideoClip[] jornal;
+    public VideoClip[] programacaoNormal;
 
     private bool tvOn;
     //dia1
-    private int dia = 1;
-    private bool startDia1;
-    private int statusDia1;
-    private bool finishDia1;
+    private int dia = 0;
+    private bool startDia;
+    private int statusDia;
+    private bool finishDia;
 
     private void Update()
     {
@@ -36,34 +36,39 @@ public class TriggerTV : MonoBehaviour
 
     public void StartTvDia1()
     {
-        if (startDia1 && !finishDia1)
+        if (startDia && !finishDia)
         {
             float currentFrame = telaTv.frame;
 
-            if (statusDia1 == 0)
+            if (statusDia == 0)
             {
-                if (currentFrame >= propaganda.frameCount - 5)
+                if (currentFrame >= propaganda[dia].frameCount - 5)
                 {
-                    telaTv.clip = jornal;
+                    telaTv.clip = jornal[dia];
                     telaTv.Play();
-                    statusDia1++;
+                    statusDia++;
                 }
             }
-            else if(statusDia1 == 1)
+            else if(statusDia == 1)
             {
-                if (currentFrame >= jornal.frameCount - 5)
+                if (currentFrame >= jornal[dia].frameCount - 10)
                 {
                     GameManager.Instance.SetMissionResume(2);
-                    telaTv.clip = programacaoNormal;
+                    telaTv.clip = programacaoNormal[dia];
                     telaTv.Play();
-                    statusDia1++;
+                    statusDia++;
+
+                    if(dia == 1)
+                    {
+                        GameManager.Instance.StartDia2Parte2();
+                    }
                 }
             }
-            else if(statusDia1 == 2)
+            else if(statusDia == 2)
             {
-                if (currentFrame >= programacaoNormal.frameCount - 5)
+                if (currentFrame >= programacaoNormal[dia].frameCount - 5)
                 {
-                    finishDia1 = true;
+                    finishDia = true;
                 }
             }
         }
@@ -75,7 +80,7 @@ public class TriggerTV : MonoBehaviour
         {
             _stayTrigger = true;
             GameManager.Instance.ViewBtn("Aperte E para ligar ou desligar a TV.");
-            feedbackArrow.SetActive(false);
+            //feedbackArrow.SetActive(false);
         }
     }
 
@@ -87,20 +92,29 @@ public class TriggerTV : MonoBehaviour
             {
                 if (!tvOn)
                 {
-                    //feedbackTarget.SetActive(false);
                     GameManager.Instance.ViewBtn("");
-                    feedbackArrow.SetActive(false);
+                    //feedbackArrow.SetActive(false);
                     audioTv.volume = 0.3f;
                     tvOn = true;
 
-                    if (dia == 1)
+                    if (dia == 0)
                     {
-                        if (!startDia1)
+                        if (!startDia)
                         {
-                            telaTv.clip = propaganda;
+                            telaTv.clip = propaganda[dia];
                             telaTv.frame = 700;
                             telaTv.Play();
-                            startDia1 = true;
+                            startDia = true;
+                        }
+                    }
+                    else if(dia == 1)
+                    {
+                        if (!startDia)
+                        {
+                            telaTv.clip = propaganda[dia];
+                            telaTv.frame = 900;
+                            telaTv.Play();
+                            startDia = true;
                         }
                     }
                 }
@@ -119,7 +133,7 @@ public class TriggerTV : MonoBehaviour
         {
             _stayTrigger = false;
             GameManager.Instance.ViewBtn("");
-            feedbackArrow.SetActive(true);
+            //feedbackArrow.SetActive(true);
         }
     }
 
@@ -128,10 +142,17 @@ public class TriggerTV : MonoBehaviour
         if(tvOn)
         {
             GameManager.Instance.ViewBtn("");
-            feedbackArrow.SetActive(true);
+            //feedbackArrow.SetActive(true);
             audioTv.volume = 0.0f;
             tvOn = false;
             meshTV.enabled = tvOn;
         }
+    }
+
+    public void ResetDia()
+    {
+        startDia = false;
+        statusDia = 0;
+        dia++;
     }
 }
