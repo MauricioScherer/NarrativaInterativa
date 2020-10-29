@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject lenteBinoculo;
     [SerializeField]
+    private GameObject luzBinoculo;
+    [SerializeField]
     private GameObject finalDia;
     [SerializeField]
     private GameObject sonoSofa;
@@ -47,6 +49,17 @@ public class GameManager : MonoBehaviour
 
     [Header("LuzesCasa")]
     public Light[] lights;
+
+    [Header("AssassinoDia1")]
+    public GameObject assassinoDia1;
+
+    [Header("Assassinato")]
+    public GameObject assassino;
+    public GameObject planeJanela;
+    public GameObject vitima;
+
+    [Header("Vizinhança")]
+    public GameObject[] moradoresDia;
 
     private void Awake()
     {
@@ -130,6 +143,14 @@ public class GameManager : MonoBehaviour
         triggerTv.ResetDia();
         ViewBtn("Aperte 'E' para acordar.");
         statusDia = 0;
+
+        //troca os como o assassino é visto
+        assassinoDia1.SetActive(false);
+        assassino.SetActive(true);
+
+        //toca vizinhança
+        moradoresDia[0].SetActive(false);
+        moradoresDia[1].SetActive(true);
     }
     public void StartDia2Parte2()
     {
@@ -147,6 +168,14 @@ public class GameManager : MonoBehaviour
     {
         statusDia = 1;
         sonoSofa.SetActive(true);
+        vitima.SetActive(true);
+    }
+
+    public void StartAssassinato()
+    {
+        assassino.GetComponent<Animator>().SetTrigger("Killer");
+        vitima.SetActive(false);
+        planeJanela.SetActive(true);
     }
 
     public void ViewBtn(string p_text)
@@ -183,6 +212,7 @@ public class GameManager : MonoBehaviour
     public void ViewLenteBinoculo(bool p_status)
     {
         lenteBinoculo.SetActive(p_status);
+        luzBinoculo.SetActive(p_status);
     }
 
     public void DesligarTvDireto()

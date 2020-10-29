@@ -46,10 +46,9 @@ public class TriggerBinoculo : MonoBehaviour
                 {
                     GameManager.Instance.ViewBtn("");
                     GameManager.Instance.ViewLenteBinoculo(true);
-                    //feedbackArrow.SetActive(false);
                     player.GetComponent<Player>().SetCanMoving();
                     mainCamera.transform.position = posCameraBinoculo.position;
-                    mainCamera.transform.localRotation = posCameraBinoculo.localRotation;
+                    mainCamera.GetComponent<Binoculo>().EnterBinoculo();
 
                     mainCamera.GetComponent<Camera>().fieldOfView = 20.0f;
                     mainCamera.GetComponent<Binoculo>().enabled = true;
@@ -58,11 +57,12 @@ public class TriggerBinoculo : MonoBehaviour
                 {
                     GameManager.Instance.ViewBtn("");
                     GameManager.Instance.ViewLenteBinoculo(false);
-                    //feedbackArrow.SetActive(true);
                     player.GetComponent<Player>().SetCanMoving();
+
+                    mainCamera.GetComponent<Binoculo>().ExitBinoculo();
+
                     mainCamera.transform.position = posCameraSala.position;
                     mainCamera.transform.rotation = posCameraSala.rotation;
-
                     mainCamera.GetComponent<Camera>().fieldOfView = 60.0f;
                     mainCamera.GetComponent<Binoculo>().enabled = false;
                 }

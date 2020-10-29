@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Binoculo : MonoBehaviour
 {
+    private bool assassinato;
+
     public float xSensitivity = 100.0f;
     public float ySensitivity = 100.0f;
 
@@ -24,5 +26,37 @@ public class Binoculo : MonoBehaviour
         yRot = Mathf.Clamp(yRot, yMinLimit, yMaxLimit);
         xRot = Mathf.Clamp(xRot, xMinLimit, xMaxLimit);
         Camera.main.transform.localEulerAngles = new Vector3(-yRot, xRot, 0);
+    }
+
+    public void ExitBinoculo()
+    {
+        xRot = 0.0f;
+        yRot = 0.0f;
+    }
+
+    public void EnterBinoculo()
+    {
+        xRot = -180.0f;
+        yRot = 0.0f;
+        Camera.main.transform.localEulerAngles = new Vector3(-yRot, xRot, 0);
+    }
+
+    private void FixedUpdate()
+    {
+        if(!assassinato)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))
+            {
+                if (hit.collider.CompareTag("TriggerJanela"))
+                {
+                    if(GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetStatusDia() == 1)
+                    {
+                        GameManager.Instance.StartAssassinato();
+                        assassinato = true;
+                    }
+                }
+            }
+        }
     }
 }
