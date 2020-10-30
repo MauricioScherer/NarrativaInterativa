@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
 
     [Header("AssassinoDia1")]
     public GameObject assassinoDia1;
+    [Header("AssassinoDia3")]
+    public GameObject assassinoDia3;
 
     [Header("Assassinato")]
     public GameObject assassino;
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour
     {
         //iniciar o ciclo para o dia 1
         Invoke("StartDia1", 5.0f);
+        moradoresDia[dia].SetActive(true);
     }
 
     void Update()
@@ -119,15 +122,23 @@ public class GameManager : MonoBehaviour
         triggerBanheiro.SetProgressFinish(false);
         missoes[0].GetComponent<MissaoDia>().MissionDia1Parte2();
     }
-    public void FinishDia1()
+    public void FinishDia()
     {
         if(startDia)
         {
             triggerTv.DesligarTv();
             lampadaQuarto.enabled = false;
             startDia = false;
-            missoes[0].SetActive(false);
+            missoes[dia].SetActive(false);
             finalDia.SetActive(true);
+
+            if(dia == 1)
+            {
+                SetStatusLights(true);
+                lights[0].enabled = false;
+                sonoSofa.GetComponent<DormirSofa>().StopRain();
+                triggerTv.GetComponent<BoxCollider>().enabled = true;
+            }
         }
     }
 
@@ -173,11 +184,6 @@ public class GameManager : MonoBehaviour
 
     public void StartDia3()
     {
-        SetStatusLights(true);
-        lights[0].enabled = false;
-        sonoSofa.GetComponent<DormirSofa>().StopRain();
-        triggerTv.GetComponent<BoxCollider>().enabled = true;
-
         alarm.Play();
         finalDia.SetActive(false);
         dia = 2;
@@ -192,9 +198,12 @@ public class GameManager : MonoBehaviour
         statusDia = 0;
 
         //troca os como o assassino é visto
+        assassino.SetActive(false);
+        assassinoDia3.SetActive(true);
 
         //toca vizinhança
-
+        moradoresDia[1].SetActive(false);
+        moradoresDia[2].SetActive(true);
     }
 
     public void StartSonoSofa()
