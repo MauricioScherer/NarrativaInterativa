@@ -12,15 +12,19 @@ public class Assassino : MonoBehaviour
     private GameObject sangue;
     [SerializeField]
     private AudioSource audioAssassino;
+    [SerializeField]
+    private GameObject thunderFinal;
 
     public void FinalKiller()
     {
         plane.material = planeBlack;
-        sangue.SetActive(true);
+        thunderFinal.SetActive(true);
+        GameManager.Instance.StartDia2Parte3();
     }
 
     public void AudioAssassinato()
     {
         audioAssassino.Play();
+        sangue.SetActive(true);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TriggerSofa : MonoBehaviour
 {
+    private bool _podeLevantar = true;
     private bool _staySofa;
     private bool _staytrigger;
     private GameObject player;
@@ -25,7 +26,6 @@ public class TriggerSofa : MonoBehaviour
             _staytrigger = true;
             player = other.gameObject;
             GameManager.Instance.ViewBtn("Aperte E para sentar no sofá.");
-            //feedbackArrow.SetActive(false);
         }
     }
 
@@ -48,18 +48,19 @@ public class TriggerSofa : MonoBehaviour
                     if(GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetQuarentena())
                     {
                         GameManager.Instance.StartSonoSofa();
-                        print("dispara o evento para dormindo");
                     }
                 }
                 else
                 {
-                    //feedbackTarget.SetActive(false);
-                    GameManager.Instance.ViewBtn("");
-                    //feedbackArrow.SetActive(true);
-                    player.GetComponent<Player>().SetCanMoving();
-                    player.GetComponent<Player>().SetViewPlayer(true);
-                    playerSofa.SetActive(false);
-                    _staySofa = false;
+                    if(_podeLevantar)
+                    {
+                        GameManager.Instance.ViewBtn("");
+                        player.GetComponent<Player>().SetCanMoving();
+                        player.GetComponent<Player>().SetViewPlayer(true);
+                        playerSofa.SetActive(false);
+                        _staySofa = false;
+                    }
+
                 }
             }
         }
@@ -79,5 +80,10 @@ public class TriggerSofa : MonoBehaviour
     public bool GetStaySofa()
     {
         return _staySofa;
+    }
+
+    public void SetPodeLevantar(bool p_status)
+    {
+        _podeLevantar = p_status;
     }
 }

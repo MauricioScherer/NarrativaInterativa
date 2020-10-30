@@ -14,6 +14,9 @@ public class TriggerTV : MonoBehaviour
     [SerializeField]
     private GameObject feedbackArrow;
 
+    public float volumeMax;
+    public float volumeMin;
+
     private bool _stayTrigger;
 
     [Header("Dia 1")]
@@ -94,7 +97,7 @@ public class TriggerTV : MonoBehaviour
                 {
                     GameManager.Instance.ViewBtn("");
                     //feedbackArrow.SetActive(false);
-                    audioTv.volume = 0.3f;
+                    audioTv.volume = volumeMax;
                     tvOn = true;
 
                     if (dia == 0)
@@ -143,7 +146,7 @@ public class TriggerTV : MonoBehaviour
         {
             GameManager.Instance.ViewBtn("");
             //feedbackArrow.SetActive(true);
-            audioTv.volume = 0.0f;
+            audioTv.volume = volumeMin;
             tvOn = false;
             meshTV.enabled = tvOn;
         }
@@ -154,5 +157,17 @@ public class TriggerTV : MonoBehaviour
         startDia = false;
         statusDia = 0;
         dia++;
+    }
+
+    public void SetVolumeBinoculo()
+    {
+        if(tvOn)
+        {
+            if (audioTv.volume == volumeMax)
+                audioTv.volume = 0.1f;
+            else
+                audioTv.volume = volumeMax;
+        }
+        
     }
 }

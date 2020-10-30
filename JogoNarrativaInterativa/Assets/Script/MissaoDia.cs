@@ -35,6 +35,18 @@ public class MissaoDia : MonoBehaviour
         descricaoMissao[2].gameObject.SetActive(false);
         descricaoMissao[3].gameObject.SetActive(false);
 
-        descricaoMissao[0].GetComponent<Text>().text = "-Descansar do Sofá";
+        descricaoMissao[0].GetComponent<Text>().text = "-Descansar no Sofá";
+    }
+
+    public void MissionDia2Parte3()
+    {
+        foreach (GameObject _obj in missionFinish)
+            _obj.SetActive(false);
+
+        descricaoMissao[1].gameObject.SetActive(false);
+        descricaoMissao[2].gameObject.SetActive(false);
+        descricaoMissao[3].gameObject.SetActive(false);
+
+        descricaoMissao[0].GetComponent<Text>().text = "-Dormir";
     }
 }

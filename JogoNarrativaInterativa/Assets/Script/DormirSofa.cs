@@ -28,4 +28,10 @@ public class DormirSofa : MonoBehaviour
         GameManager.Instance.SetStatusLights(false);
         objrain.SetActive(true);
     }
+
+    public void StopRain()
+    {
+        rain.Stop();
+        objrain.SetActive(false);
+    }
 }

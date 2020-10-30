@@ -50,9 +50,10 @@ public class Binoculo : MonoBehaviour
             {
                 if (hit.collider.CompareTag("TriggerJanela"))
                 {
-                    if(GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetStatusDia() == 1)
+                    if(GameManager.Instance.GetDiaCurrent() == 1)
                     {
                         GameManager.Instance.StartAssassinato();
+                        hit.collider.enabled = false;
                         assassinato = true;
                     }
                 }
