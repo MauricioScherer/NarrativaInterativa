@@ -6,6 +6,13 @@ public class FinalDia : MonoBehaviour
 {
     public void StartNewDia()
     {
-        GameManager.Instance.StartDia2();
+        if(GameManager.Instance.GetDiaCurrent() == 0)
+        {
+            GameManager.Instance.StartDia2();
+        }
+        else if(GameManager.Instance.GetDiaCurrent() == 1)
+        {
+            GameManager.Instance.StartDia3();
+        }
     }
 }

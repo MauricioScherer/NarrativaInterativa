@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private bool startDia;
 
     private bool quarentena;
+    private bool podeLevantarSofa;
 
     [SerializeField]
     private AudioSource alarm;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
     public GameObject assassino;
     public GameObject planeJanela;
     public GameObject vitima;
+    public BoxCollider triggerJanela;
 
     [Header("Vizinhança")]
     public GameObject[] moradoresDia;
@@ -147,6 +149,7 @@ public class GameManager : MonoBehaviour
         //troca os como o assassino é visto
         assassinoDia1.SetActive(false);
         assassino.SetActive(true);
+        vitima.SetActive(true);
 
         //toca vizinhança
         moradoresDia[0].SetActive(false);
@@ -160,15 +163,45 @@ public class GameManager : MonoBehaviour
         if (triggerSofa.GetStaySofa())
         {
             StartSonoSofa();
-            print("dispara o evento para dormindo");
         }
+    }
+    public void StartDia2Parte3()
+    {
+        triggerCama.SetPodeDormir(true);
+        missoes[dia].GetComponent<MissaoDia>().MissionDia2Parte3();
+    }
+
+    public void StartDia3()
+    {
+        SetStatusLights(true);
+        lights[0].enabled = false;
+        sonoSofa.GetComponent<DormirSofa>().StopRain();
+        triggerTv.GetComponent<BoxCollider>().enabled = true;
+
+        alarm.Play();
+        finalDia.SetActive(false);
+        dia = 2;
+        btnAcordar.SetActive(true);
+        missoes[dia].SetActive(true);
+        startDia = true;
+        triggerCama.SetPodeDormir(false);
+        triggerCafe.SetProgressFinish(false);
+        triggerBanheiro.SetProgressFinish(false);
+        triggerTv.ResetDia();
+        ViewBtn("Aperte 'E' para acordar.");
+        statusDia = 0;
+
+        //troca os como o assassino é visto
+
+        //toca vizinhança
+
     }
 
     public void StartSonoSofa()
     {
-        statusDia = 1;
+        triggerSofa.SetPodeLevantar(false);
         sonoSofa.SetActive(true);
-        vitima.SetActive(true);
+        triggerJanela.enabled = true;
     }
 
     public void StartAssassinato()
@@ -213,6 +246,7 @@ public class GameManager : MonoBehaviour
     {
         lenteBinoculo.SetActive(p_status);
         luzBinoculo.SetActive(p_status);
+        triggerTv.SetVolumeBinoculo();
     }
 
     public void DesligarTvDireto()
@@ -228,7 +262,9 @@ public class GameManager : MonoBehaviour
         if(!p_status)
         {
             triggerTv.DesligarTv();
+            triggerSofa.SetPodeLevantar(true);
             triggerTv.GetComponent<BoxCollider>().enabled = false;
+            missoes[dia].GetComponent<MissaoDia>().SetMissionFinish(0);
         }
     }
 }
