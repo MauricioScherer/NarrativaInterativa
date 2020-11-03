@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [SerializeField]
     private int dia = 0;
     private int statusDia;
     private bool startDia;
@@ -72,6 +74,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         //iniciar o ciclo para o dia 1
         Invoke("StartDia1", 5.0f);
         moradoresDia[dia].SetActive(true);
@@ -84,28 +89,35 @@ public class GameManager : MonoBehaviour
             case 0:
                 if(Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
                 {
-                    alarm.Stop();
-                    btnAcordar.SetActive(false);
-                    triggerCama.Acordar();
-                    player.SetCanMoving();
-                    player.SetViewPlayer(true);
-                    lampadaQuarto.enabled = true;
+                    StandardStartDia();
                 }
                 break;
             case 1:
                 if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
                 {
-                    alarm.Stop();
-                    btnAcordar.SetActive(false);
-                    triggerCama.Acordar();
-                    player.SetCanMoving();
-                    player.SetViewPlayer(true);
-                    lampadaQuarto.enabled = true;
+                    StandardStartDia();
+                }
+                break;
+            case 2:
+                if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
+                {
+                    StandardStartDia();
+                    SceneManager.LoadScene(0);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private void StandardStartDia()
+    {
+        alarm.Stop();
+        btnAcordar.SetActive(false);
+        triggerCama.Acordar();
+        player.SetCanMoving();
+        player.SetViewPlayer(true);
+        lampadaQuarto.enabled = true;
     }
 
     private void StartDia1()
@@ -131,14 +143,6 @@ public class GameManager : MonoBehaviour
             startDia = false;
             missoes[dia].SetActive(false);
             finalDia.SetActive(true);
-
-            if(dia == 1)
-            {
-                SetStatusLights(true);
-                lights[0].enabled = false;
-                sonoSofa.GetComponent<DormirSofa>().StopRain();
-                triggerTv.GetComponent<BoxCollider>().enabled = true;
-            }
         }
     }
 
@@ -182,8 +186,18 @@ public class GameManager : MonoBehaviour
         missoes[dia].GetComponent<MissaoDia>().MissionDia2Parte3();
     }
 
+    public void FinishDia3()
+    {
+        SetStatusLights(true);
+        lights[0].enabled = false;
+        sonoSofa.GetComponent<DormirSofa>().StopRain();
+        triggerTv.GetComponent<BoxCollider>().enabled = true;
+    }
+
     public void StartDia3()
     {
+
+
         alarm.Play();
         finalDia.SetActive(false);
         dia = 2;
