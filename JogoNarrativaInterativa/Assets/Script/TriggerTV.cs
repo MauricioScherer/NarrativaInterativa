@@ -26,10 +26,15 @@ public class TriggerTV : MonoBehaviour
 
     private bool tvOn;
     //dia1
-    private int dia = 0;
+    private int dia;
     private bool startDia;
     private int statusDia;
     private bool finishDia;
+
+    private void Start()
+    {
+        dia = GameManager.Instance.GetDiaCurrent();
+    }
 
     private void Update()
     {

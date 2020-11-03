@@ -15,4 +15,12 @@ public class FinalDia : MonoBehaviour
             GameManager.Instance.StartDia3();
         }
     }
+
+    public void ResetInBlack()
+    {
+        if (GameManager.Instance.GetDiaCurrent() == 1)
+        {
+            GameManager.Instance.FinishDia3();
+        }
+    }
 }
