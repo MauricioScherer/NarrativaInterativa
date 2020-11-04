@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour
                 if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
                 {
                     StandardStartDia();
-                    SceneManager.LoadScene(0);
                 }
                 break;
             default:
@@ -191,13 +190,12 @@ public class GameManager : MonoBehaviour
         SetStatusLights(true);
         lights[0].enabled = false;
         sonoSofa.GetComponent<DormirSofa>().StopRain();
+        sonoSofa.SetActive(false);
         triggerTv.GetComponent<BoxCollider>().enabled = true;
     }
 
     public void StartDia3()
     {
-
-
         alarm.Play();
         finalDia.SetActive(false);
         dia = 2;
@@ -207,13 +205,17 @@ public class GameManager : MonoBehaviour
         triggerCama.SetPodeDormir(false);
         triggerCafe.SetProgressFinish(false);
         triggerBanheiro.SetProgressFinish(false);
+        
         triggerTv.ResetDia();
         ViewBtn("Aperte 'E' para acordar.");
         statusDia = 0;
 
         //troca os como o assassino é visto
+        assassino.GetComponent<Assassino>().ResetDia3();
         assassino.SetActive(false);
         assassinoDia3.SetActive(true);
+        planeJanela.SetActive(false);
+
 
         //toca vizinhança
         moradoresDia[1].SetActive(false);
