@@ -27,4 +27,10 @@ public class Assassino : MonoBehaviour
         audioAssassino.Play();
         sangue.SetActive(true);
     }
+
+    public void ResetDia3()
+    {
+        thunderFinal.SetActive(false);
+        sangue.SetActive(false);
+    }
 }

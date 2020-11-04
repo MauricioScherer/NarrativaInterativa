@@ -50,8 +50,9 @@ public class TriggerTV : MonoBehaviour
 
             if (statusDia == 0)
             {
-                if (currentFrame >= propaganda[dia].frameCount - 5)
+                if (currentFrame >= propaganda[dia].frameCount - 15)
                 {
+                    print("troca para o jornal");
                     telaTv.clip = jornal[dia];
                     telaTv.Play();
                     statusDia++;
@@ -125,6 +126,16 @@ public class TriggerTV : MonoBehaviour
                             startDia = true;
                         }
                     }
+                    else if (dia == 2)
+                    {
+                        if (!startDia)
+                        {
+                            telaTv.clip = propaganda[dia];
+                            telaTv.frame = 600;
+                            telaTv.Play();
+                            startDia = true;
+                        }
+                    }
                 }
                 else
                 {
@@ -160,8 +171,9 @@ public class TriggerTV : MonoBehaviour
     public void ResetDia()
     {
         startDia = false;
+        finishDia = false;
         statusDia = 0;
-        dia++;
+        dia = GameManager.Instance.GetDiaCurrent();
     }
 
     public void SetVolumeBinoculo()
