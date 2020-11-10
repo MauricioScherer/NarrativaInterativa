@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField]
     private int dia = 0;
     private int statusDia;
     private bool startDia;
@@ -17,6 +16,8 @@ public class GameManager : MonoBehaviour
     private bool quarentena;
     private bool podeLevantarSofa;
 
+    [SerializeField]
+    private Relogio relogio;
     [SerializeField]
     private AudioSource alarm;
     [SerializeField]
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
     public TriggerTV triggerTv;
     [Header("TriggerSofa")]
     public TriggerSofa triggerSofa;
+    [Header("TriggerPC")]
+    public TrriggerHomeoffice triggerPC;
 
     [Header("Missoes")]
     public GameObject[] missoes;
@@ -132,6 +135,7 @@ public class GameManager : MonoBehaviour
         triggerCafe.SetProgressFinish(false);
         triggerBanheiro.SetProgressFinish(false);
         missoes[0].GetComponent<MissaoDia>().MissionDia1Parte2();
+        SetRelogio(23);
     }
     public void FinishDia()
     {
@@ -147,6 +151,7 @@ public class GameManager : MonoBehaviour
 
     public void StartDia2()
     {
+        SetRelogio(8);
         alarm.Play();
         finalDia.SetActive(false);
         dia = 1;
@@ -196,6 +201,7 @@ public class GameManager : MonoBehaviour
 
     public void StartDia3()
     {
+        SetRelogio(8);
         alarm.Play();
         finalDia.SetActive(false);
         dia = 2;
@@ -216,10 +222,11 @@ public class GameManager : MonoBehaviour
         assassinoDia3.SetActive(true);
         planeJanela.SetActive(false);
 
-
         //toca vizinhança
         moradoresDia[1].SetActive(false);
         moradoresDia[2].SetActive(true);
+
+        triggerPC.gameObject.SetActive(true);
     }
 
     public void StartSonoSofa()
@@ -227,6 +234,7 @@ public class GameManager : MonoBehaviour
         triggerSofa.SetPodeLevantar(false);
         sonoSofa.SetActive(true);
         triggerJanela.enabled = true;
+        SetRelogio(19);
     }
 
     public void StartAssassinato()
@@ -291,5 +299,15 @@ public class GameManager : MonoBehaviour
             triggerTv.GetComponent<BoxCollider>().enabled = false;
             missoes[dia].GetComponent<MissaoDia>().SetMissionFinish(0);
         }
+    }
+
+    public void SetRelogio(int p_hora)
+    {
+        relogio.SetNewHour(p_hora);
+    }
+
+    public void MoreHour()
+    {
+        relogio.MoreHour();
     }
 }
