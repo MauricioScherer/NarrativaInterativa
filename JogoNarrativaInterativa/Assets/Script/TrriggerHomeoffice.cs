@@ -10,6 +10,8 @@ public class TrriggerHomeoffice : MonoBehaviour
     private bool _staytrigger;
     private bool _stayJob;
     private GameObject player;
+    private KeyCode clickEvent;
+    private Event e;
 
     private KeyCode[] keyCodeSort = new KeyCode[4] {KeyCode.W, KeyCode.D, KeyCode.S, KeyCode.A };
     private KeyCode keyCurrent;
@@ -26,6 +28,13 @@ public class TrriggerHomeoffice : MonoBehaviour
     private GameObject playerTrabalhando;
     [SerializeField]
     private GameObject feedProgresso;
+    private int numColor;
+    [SerializeField]
+    private Color[] mainColor;
+    [SerializeField]
+    private AudioSource feedAudio;
+    [SerializeField]
+    private AudioClip[] clips;
 
     private void Start()
     {
@@ -37,6 +46,15 @@ public class TrriggerHomeoffice : MonoBehaviour
     {
         StayTrigger();
         Job();
+    }
+
+    void OnGUI()
+    {
+        e = Event.current;
+        if (e.isKey)
+        {
+            clickEvent = e.keyCode;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -98,20 +116,36 @@ public class TrriggerHomeoffice : MonoBehaviour
         {
             inputCurrent.text = keyCurrent.ToString();
 
-            if (Input.GetKeyDown(keyCurrent))
+            if (Input.GetKeyUp(clickEvent))
             {
-                progressBar.fillAmount += 0.1f;
-                keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
-
-                if(progressBar.fillAmount > 0.9f)
+                Debug.Log(clickEvent);
+                if (keyCurrent == clickEvent)
                 {
-                    progressBar.fillAmount = 0.0f;
-                    countJob++;
-                    count.text = countJob.ToString() + "/10";
-                    GameManager.Instance.MoreHour();
-                }
+                    progressBar.fillAmount += 0.2f;
+                    keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
 
-                sortNewKey = 0;
+                    if (progressBar.fillAmount > 0.9f)
+                    {
+                        progressBar.fillAmount = 0.0f;
+                        countJob++;
+                        count.text = countJob.ToString() + "/10";
+                        GameManager.Instance.MoreHour();
+                    }
+
+                    sortNewKey = 0;
+
+                    numColor = numColor == 0 ? numColor = 1 : numColor = 0;
+                    inputCurrent.color = mainColor[numColor];
+
+                    feedAudio.clip = clips[0];
+                    feedAudio.Play();
+                }
+                else
+                {
+                    NewSortKey();
+                    feedAudio.clip = clips[1];
+                    feedAudio.Play();
+                }
             }
 
             sortNewKey++;
@@ -125,8 +159,12 @@ public class TrriggerHomeoffice : MonoBehaviour
 
     private void NewSortKey()
     {
-        progressBar.fillAmount -= 0.1f;
+        progressBar.fillAmount -= 0.2f;
         keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
         sortNewKey = 0;
+
+        numColor = numColor == 0 ? numColor = 1 : numColor = 0;
+        inputCurrent.color = mainColor[numColor];
+            
     }
 }
