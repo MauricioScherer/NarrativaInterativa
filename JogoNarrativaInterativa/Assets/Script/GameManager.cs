@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     private GameObject finalDia;
     [SerializeField]
     private GameObject sonoSofa;
+    [Header("TriggerPC")]
+    public GameObject papel1;
 
     [Header("Player")]
     public Player player;
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
     public TriggerSofa triggerSofa;
     [Header("TriggerPC")]
     public TrriggerHomeoffice triggerPC;
+
 
     [Header("Missoes")]
     public GameObject[] missoes;
@@ -69,6 +72,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Vizinhança")]
     public GameObject[] moradoresDia;
+
+      
 
     private void Awake()
     {
@@ -309,5 +314,18 @@ public class GameManager : MonoBehaviour
     public void MoreHour()
     {
         relogio.MoreHour();
+
+        if(dia == 2)
+        {
+            if(relogio.GetHour() == 10)
+            {
+                ViewPapel1(true);
+            }
+        }
+    }
+
+    public void ViewPapel1(bool p_status)
+    {
+        papel1.SetActive(p_status);
     }
 }

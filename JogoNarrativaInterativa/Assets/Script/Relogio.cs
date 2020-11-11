@@ -13,6 +13,11 @@ public class Relogio : MonoBehaviour
     [SerializeField]
     private TextMeshPro textHour;
 
+    private void Start()
+    {
+        hour = 8;
+    }
+
     void FixedUpdate()
     {
         if(seconds >= 3600)
@@ -48,5 +53,10 @@ public class Relogio : MonoBehaviour
         string _hour = hour < 10 ? "0" + hour.ToString() : hour.ToString();
         string _minutos = minuto < 10 ? "0" + minuto.ToString() : minuto.ToString();
         textHour.text = _hour + ":" + _minutos;
+    }
+
+    public int GetHour()
+    {
+        return hour;
     }
 }
