@@ -7,6 +7,7 @@ public class TriggerSofa : MonoBehaviour
     private bool _podeLevantar = true;
     private bool _staySofa;
     private bool _staytrigger;
+    private bool _sonoSofa;
     private GameObject player;
 
     [SerializeField]
@@ -45,8 +46,12 @@ public class TriggerSofa : MonoBehaviour
                     playerSofa.SetActive(true);
                     _staySofa = true;
 
-                    if(GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetQuarentena())
+                    print("0");
+
+                    if (GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetQuarentena() && !_sonoSofa)
                     {
+                        print("1");
+                        _sonoSofa = true;
                         GameManager.Instance.StartSonoSofa();
                     }
                 }

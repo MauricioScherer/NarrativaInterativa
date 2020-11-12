@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TriggerPapel : MonoBehaviour
 {
+    private bool _staytrigger;
     private GameObject player;
 
     [SerializeField]
@@ -18,6 +19,7 @@ public class TriggerPapel : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _staytrigger = true;
             player = other.gameObject;
             GameManager.Instance.ViewBtn("Aperte 'E' para pegar o bilhete.");
         }
@@ -25,19 +27,22 @@ public class TriggerPapel : MonoBehaviour
 
     private void StayTrigger()
     {
-        if (Input.GetKeyDown("e"))
+        if(_staytrigger)
         {
-            if (!bilhete.activeSelf)
+            if (Input.GetKeyDown("e"))
             {
-                GameManager.Instance.ViewBtn("");
-                player.GetComponent<Player>().SetCanMoving();
-                bilhete.SetActive(true);
-            }
-            else
-            {
-                GameManager.Instance.ViewPapel1(false);
-                player.GetComponent<Player>().SetCanMoving();
-                bilhete.SetActive(false);
+                if (!bilhete.activeSelf)
+                {
+                    GameManager.Instance.ViewBtn("");
+                    player.GetComponent<Player>().SetCanMoving();
+                    bilhete.SetActive(true);
+                }
+                else
+                {
+                    GameManager.Instance.ViewPapel1(false);
+                    player.GetComponent<Player>().SetCanMoving();
+                    bilhete.SetActive(false);
+                }
             }
         }
     }
@@ -46,6 +51,7 @@ public class TriggerPapel : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _staytrigger = false;
             GameManager.Instance.ViewBtn("");
         }
     }

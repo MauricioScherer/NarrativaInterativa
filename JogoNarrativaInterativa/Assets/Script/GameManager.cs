@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
 
     public void StartDia2()
     {
-        SetRelogio(8);
+        ResetRelogio();
         alarm.Play();
         finalDia.SetActive(false);
         dia = 1;
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
 
     public void StartDia3()
     {
-        SetRelogio(8);
+        ResetRelogio();
         alarm.Play();
         finalDia.SetActive(false);
         dia = 2;
@@ -234,8 +234,15 @@ public class GameManager : MonoBehaviour
         triggerPC.gameObject.SetActive(true);
     }
 
+    public void FinishjobDia3()
+    {
+        missoes[dia].GetComponent<MissaoDia>().MissionDia1Parte2();
+        triggerCama.SetPodeDormir(true);
+    }
+
     public void StartSonoSofa()
     {
+        print("2");
         triggerSofa.SetPodeLevantar(false);
         sonoSofa.SetActive(true);
         triggerJanela.enabled = true;
@@ -311,6 +318,11 @@ public class GameManager : MonoBehaviour
         relogio.SetNewHour(p_hora);
     }
 
+    public void ResetRelogio()
+    {
+        relogio.ResetHour();
+    }
+
     public void MoreHour()
     {
         relogio.MoreHour();
@@ -320,6 +332,13 @@ public class GameManager : MonoBehaviour
             if(relogio.GetHour() == 10)
             {
                 ViewPapel1(true);
+            }
+            
+            if(relogio.GetHour() == 16)
+            {
+                moradoresDia[2].SetActive(false);
+                assassinoDia3.SetActive(false);
+                moradoresDia[3].SetActive(true);
             }
         }
     }
