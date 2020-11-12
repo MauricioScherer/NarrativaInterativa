@@ -20,14 +20,16 @@ public class Relogio : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(seconds >= 3600)
+        if(seconds >= 200)
         {
             if (minuto < 60)
             {
                 minuto++;
+                SetHour();
             }
             else
             {
+                MoreHour();
                 minuto = 0;
             }
             seconds = 0;
@@ -42,9 +44,21 @@ public class Relogio : MonoBehaviour
         SetHour();
     }
 
+    public void ResetHour()
+    {
+        hour = 8;
+        minuto = 0;
+        seconds = 0;
+        SetHour();
+    }
+
     public void MoreHour()
     {
-        hour++;
+        if (hour < 23)
+            hour++;
+        else
+            hour = 0;
+        
         SetHour();
     }
 

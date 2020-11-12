@@ -9,6 +9,7 @@ public class TrriggerHomeoffice : MonoBehaviour
 {
     private bool _staytrigger;
     private bool _stayJob;
+    private bool _finishJob;
     private GameObject player;
     private KeyCode clickEvent;
     private Event e;
@@ -63,7 +64,8 @@ public class TrriggerHomeoffice : MonoBehaviour
         {
             _staytrigger = true;
             player = other.gameObject;
-            GameManager.Instance.ViewBtn("Aperte E para trabalhar.");
+            if(!_finishJob)
+                GameManager.Instance.ViewBtn("Aperte E para trabalhar.");
         }
     }
 
@@ -73,7 +75,7 @@ public class TrriggerHomeoffice : MonoBehaviour
         {
             if (Input.GetKeyDown("e"))
             {
-                if (player.GetComponent<Player>().GetCanMoving())
+                if (player.GetComponent<Player>().GetCanMoving() && !_finishJob)
                 {
                     GameManager.Instance.ViewBtn("");
                     player.GetComponent<Player>().SetCanMoving();
@@ -81,11 +83,6 @@ public class TrriggerHomeoffice : MonoBehaviour
                     playerTrabalhando.SetActive(true);
                     feedProgresso.SetActive(true);
                     _stayJob = true;
-
-                    if (GameManager.Instance.GetDiaCurrent() == 1 && GameManager.Instance.GetQuarentena())
-                    {
-                        GameManager.Instance.StartSonoSofa();
-                    }
                 }
                 else
                 {
@@ -105,14 +102,13 @@ public class TrriggerHomeoffice : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _staytrigger = false;
-
             GameManager.Instance.ViewBtn("");
         }
     }
 
     private void Job()
     {
-        if (_stayJob)
+        if (_stayJob && !_finishJob)
         {
             inputCurrent.text = keyCurrent.ToString();
 
@@ -128,8 +124,23 @@ public class TrriggerHomeoffice : MonoBehaviour
                     {
                         progressBar.fillAmount = 0.0f;
                         countJob++;
-                        count.text = countJob.ToString() + "/10";
-                        GameManager.Instance.MoreHour();
+                        if(countJob < 10)
+                        {
+                            count.text = countJob.ToString() + "/10";
+                            GameManager.Instance.MoreHour();
+                        }
+                        else
+                        {
+                            count.text = countJob.ToString() + "/10";
+                            GameManager.Instance.MoreHour();
+                            _finishJob = true;
+                            player.GetComponent<Player>().SetCanMoving();
+                            player.GetComponent<Player>().SetViewPlayer(true);
+                            playerTrabalhando.SetActive(false);
+                            feedProgresso.SetActive(false);
+                            GameManager.Instance.FinishjobDia3();
+                            _stayJob = false;
+                        }
                     }
 
                     sortNewKey = 0;
