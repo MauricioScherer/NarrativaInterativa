@@ -40,6 +40,9 @@ public class TriggerPapel : MonoBehaviour
                 else
                 {
                     GameManager.Instance.ViewPapel1(false);
+                    GameManager.Instance.ViewPapel2(false);
+                    GameManager.Instance.ViewPapel3(false);
+                    GameManager.Instance.ViewPapel4(false);
                     player.GetComponent<Player>().SetCanMoving();
                     bilhete.SetActive(false);
                 }

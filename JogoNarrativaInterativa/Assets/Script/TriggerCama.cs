@@ -49,8 +49,13 @@ public class TriggerCama : MonoBehaviour
                     if (podeDormir)
                     {
                         GameManager.Instance.ViewBtn("");
-                        GameManager.Instance.FinishDia();
-                        //feedbackArrow.SetActive(false);
+                        if(GameManager.Instance.GetDiaCurrent() == 4)
+                        {
+                            GameManager.Instance.Final();
+                            podeDormir = false;
+                        }
+                        else
+                            GameManager.Instance.FinishDia();
                         player.GetComponent<Player>().SetCanMoving();
                         player.GetComponent<Player>().SetViewPlayer(false);
                         playerCama.SetActive(true);

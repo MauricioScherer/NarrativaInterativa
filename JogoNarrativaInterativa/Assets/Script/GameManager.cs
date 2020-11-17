@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     private bool quarentena;
     private bool podeLevantarSofa;
 
+    private bool _estaBisbilhotando;
+
+    [SerializeField]
+    private GameObject pauseMenu;
     [SerializeField]
     private Relogio relogio;
     [SerializeField]
@@ -34,8 +38,14 @@ public class GameManager : MonoBehaviour
     private GameObject finalDia;
     [SerializeField]
     private GameObject sonoSofa;
-    [Header("TriggerPC")]
+    [SerializeField]
     public GameObject papel1;
+    [SerializeField]
+    public GameObject papel2;
+    [SerializeField]
+    public GameObject papel3;
+    [SerializeField]
+    public GameObject papel4;
 
     [Header("Player")]
     public Player player;
@@ -73,7 +83,9 @@ public class GameManager : MonoBehaviour
     [Header("Vizinhança")]
     public GameObject[] moradoresDia;
 
-      
+    [Header("Final")]
+    public GameObject finalRain;
+    public GameObject rainFinalGame;
 
     private void Awake()
     {
@@ -92,6 +104,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activeSelf)
+        {
+            PauseMenu(true);
+        }
+
         switch(dia)
         { 
             case 0:
@@ -112,9 +129,49 @@ public class GameManager : MonoBehaviour
                     StandardStartDia();
                 }
                 break;
+            case 3:
+                if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
+                {
+                    StandardStartDia();
+                }
+                break;
+            case 4:
+                if (Input.GetKeyDown("e") && triggerCama.GetEstaDormindo() && startDia)
+                {
+                    if(!rainFinalGame.activeSelf)
+                    {
+                        btnAcordar.SetActive(false);
+                        triggerCama.Acordar();
+                        player.SetCanMoving();
+                        player.SetViewPlayer(true);
+                    }
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    public void PauseMenu(bool p_status)
+    {
+        if (p_status)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1.0f;
+        }
+
+        Cursor.visible = p_status;
+        pauseMenu.SetActive(p_status);
+    }
+
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void StandardStartDia()
@@ -238,6 +295,57 @@ public class GameManager : MonoBehaviour
     {
         missoes[dia].GetComponent<MissaoDia>().MissionDia1Parte2();
         triggerCama.SetPodeDormir(true);
+        triggerCafe.SetProgressFinish(false);
+        triggerBanheiro.SetProgressFinish(false);
+    }
+
+    public void StartDia4()
+    {
+        ResetRelogio();
+        alarm.Play();
+        finalDia.SetActive(false);
+        dia = 3;
+        btnAcordar.SetActive(true);
+        missoes[dia].SetActive(true);
+        startDia = true;
+        triggerCama.SetPodeDormir(false);
+        triggerCafe.SetProgressFinish(false);
+        triggerBanheiro.SetProgressFinish(false);
+
+        triggerTv.ResetDia();
+        ViewBtn("Aperte 'E' para acordar.");
+        statusDia = 0;
+
+        triggerPC.ResetJob();
+
+        moradoresDia[3].SetActive(false);
+        moradoresDia[4].SetActive(true);
+    }
+
+    public void StartFinalGame()
+    {
+        dia = 4;
+        startDia = true;
+
+        print("acorda durante a noite");
+        triggerCama.SetPodeDormir(false);
+        triggerCafe.SetProgressFinish(true);
+        triggerBanheiro.SetProgressFinish(true);
+        moradoresDia[4].SetActive(false);
+        SetRelogio(3);
+        triggerPC.gameObject.SetActive(false);
+        ViewPapel4(true);
+
+        foreach (Light obj in lights)
+            obj.enabled = false;
+
+        finalRain.SetActive(true);
+        finalRain.GetComponent<FinalRain>().StartThunder();
+    }
+
+    public void Final()
+    {
+        rainFinalGame.SetActive(true);
     }
 
     public void StartSonoSofa()
@@ -292,6 +400,11 @@ public class GameManager : MonoBehaviour
         lenteBinoculo.SetActive(p_status);
         luzBinoculo.SetActive(p_status);
         triggerTv.SetVolumeBinoculo();
+
+        if(dia == 2 && !_estaBisbilhotando && relogio.GetHour() >= 10)
+        {
+            _estaBisbilhotando = true;
+        }
     }
 
     public void DesligarTvDireto()
@@ -341,10 +454,37 @@ public class GameManager : MonoBehaviour
                 moradoresDia[3].SetActive(true);
             }
         }
+        else if(dia == 3)
+        {
+            if (relogio.GetHour() == 13)
+            {
+                if(_estaBisbilhotando)
+                    ViewPapel2(true); // papel caso o jogador tenha bisbilhotado
+                else
+                    ViewPapel3(true); // papel caso o jogador não tenha bisbilhotado
+            }
+        }
     }
 
     public void ViewPapel1(bool p_status)
     {
         papel1.SetActive(p_status);
+    }
+    public void ViewPapel2(bool p_status)
+    {
+        papel2.SetActive(p_status);
+    }
+    public void ViewPapel3(bool p_status)
+    {
+        papel3.SetActive(p_status);
+    }
+    public void ViewPapel4(bool p_status)
+    {
+        papel4.SetActive(p_status);
+
+        if(dia == 4 && !p_status)
+        {
+            triggerCama.SetPodeDormir(true);
+        }
     }
 }
