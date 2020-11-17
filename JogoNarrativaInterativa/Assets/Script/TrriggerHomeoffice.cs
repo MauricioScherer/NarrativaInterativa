@@ -71,11 +71,11 @@ public class TrriggerHomeoffice : MonoBehaviour
 
     private void StayTrigger()
     {
-        if (_staytrigger)
+        if (_staytrigger && !_finishJob)
         {
             if (Input.GetKeyDown("e"))
             {
-                if (player.GetComponent<Player>().GetCanMoving() && !_finishJob)
+                if (player.GetComponent<Player>().GetCanMoving())
                 {
                     GameManager.Instance.ViewBtn("");
                     player.GetComponent<Player>().SetCanMoving();
@@ -114,10 +114,9 @@ public class TrriggerHomeoffice : MonoBehaviour
 
             if (Input.GetKeyUp(clickEvent))
             {
-                Debug.Log(clickEvent);
                 if (keyCurrent == clickEvent)
                 {
-                    progressBar.fillAmount += 0.2f;
+                    progressBar.fillAmount += 0.3f;
                     keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
 
                     if (progressBar.fillAmount > 0.9f)
@@ -170,12 +169,23 @@ public class TrriggerHomeoffice : MonoBehaviour
 
     private void NewSortKey()
     {
-        progressBar.fillAmount -= 0.2f;
+        progressBar.fillAmount -= 0.3f;
         keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
         sortNewKey = 0;
 
         numColor = numColor == 0 ? numColor = 1 : numColor = 0;
+        inputCurrent.color = mainColor[numColor];            
+    }
+
+    public void ResetJob()
+    {
+        _finishJob = false;
+        progressBar.fillAmount = 0.0f;
+        keyCurrent = keyCodeSort[UnityEngine.Random.Range(0, keyCodeSort.Length)];
+        sortNewKey = 0;
+        numColor = numColor == 0 ? numColor = 1 : numColor = 0;
         inputCurrent.color = mainColor[numColor];
-            
+        countJob = 0;
+        count.text = countJob.ToString() + "/10";
     }
 }

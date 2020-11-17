@@ -136,6 +136,16 @@ public class TriggerTV : MonoBehaviour
                             startDia = true;
                         }
                     }
+                    else if (dia == 3)
+                    {
+                        if (!startDia)
+                        {
+                            telaTv.clip = propaganda[dia];
+                            telaTv.frame = 700;
+                            telaTv.Play();
+                            startDia = true;
+                        }
+                    }
                 }
                 else
                 {
