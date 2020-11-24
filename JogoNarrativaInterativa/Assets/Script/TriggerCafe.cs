@@ -17,6 +17,11 @@ public class TriggerCafe : MonoBehaviour
     [SerializeField]
     private AudioClip[] clips;
 
+    [SerializeField]
+    private GameObject feedCafe;
+    [SerializeField]
+    private GameObject feedJanta;
+
     private GameObject player;
     private bool progressoFinish;
 
@@ -63,7 +68,10 @@ public class TriggerCafe : MonoBehaviour
             if (!progressoFinish)
             {
                 _stayTrigger = true;
-                GameManager.Instance.ViewBtn("Aperte E para tomar café");
+                if (feedCafe.activeSelf)
+                    GameManager.Instance.ViewBtn("Aperte E para tomar café");
+                else
+                    GameManager.Instance.ViewBtn("Aperte E para jantar");
             }
         }
     }
@@ -80,7 +88,10 @@ public class TriggerCafe : MonoBehaviour
                     {
                         progresso.SetActive(true);
                         GameManager.Instance.ViewBtn("");
-                        inputSound.clip = clips[0];
+                        if(feedCafe.activeSelf)
+                            inputSound.clip = clips[0];
+                        else
+                            inputSound.clip = clips[2];
                         player.GetComponent<Player>().SetCanMoving();
                     }
                     else
@@ -111,5 +122,11 @@ public class TriggerCafe : MonoBehaviour
     public void SetProgressFinish(bool p_status)
     {
         progressoFinish = p_status;
+    }
+
+    public void ViewFeedCafe(bool p_status)
+    {
+        feedCafe.SetActive(p_status);
+        feedJanta.SetActive(!p_status);
     }
 }

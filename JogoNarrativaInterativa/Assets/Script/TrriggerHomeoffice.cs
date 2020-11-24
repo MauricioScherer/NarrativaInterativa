@@ -10,6 +10,7 @@ public class TrriggerHomeoffice : MonoBehaviour
     private bool _staytrigger;
     private bool _stayJob;
     private bool _finishJob;
+    private bool _podeTrabalhar;
     private GameObject player;
     private KeyCode clickEvent;
     private Event e;
@@ -65,7 +66,12 @@ public class TrriggerHomeoffice : MonoBehaviour
             _staytrigger = true;
             player = other.gameObject;
             if(!_finishJob)
-                GameManager.Instance.ViewBtn("Aperte E para trabalhar.");
+            {
+                if(_podeTrabalhar)
+                    GameManager.Instance.ViewBtn("Aperte E para trabalhar.");
+                else
+                    GameManager.Instance.ViewBtn("Melhor ver as notícias antes de trabalhar.");
+            }
         }
     }
 
@@ -73,7 +79,7 @@ public class TrriggerHomeoffice : MonoBehaviour
     {
         if (_staytrigger && !_finishJob)
         {
-            if (Input.GetKeyDown("e"))
+            if (Input.GetKeyDown("e") && _podeTrabalhar)
             {
                 if (player.GetComponent<Player>().GetCanMoving())
                 {
@@ -187,5 +193,15 @@ public class TrriggerHomeoffice : MonoBehaviour
         inputCurrent.color = mainColor[numColor];
         countJob = 0;
         count.text = countJob.ToString() + "/10";
+    }
+
+    public bool PodeTrabalhar()
+    {
+        return _podeTrabalhar;
+    }
+
+    public void SetPodeTrabalhar(bool p_status)
+    {
+        _podeTrabalhar = p_status;
     }
 }

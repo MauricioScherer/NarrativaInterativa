@@ -56,6 +56,11 @@ public class TriggerTV : MonoBehaviour
                     telaTv.clip = jornal[dia];
                     telaTv.Play();
                     statusDia++;
+
+                    if(dia == 2 || dia == 3)
+                    {
+                        GameManager.Instance.triggerPC.SetPodeTrabalhar(true);
+                    }
                 }
             }
             else if(statusDia == 1)

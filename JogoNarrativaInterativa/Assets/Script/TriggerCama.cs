@@ -55,7 +55,9 @@ public class TriggerCama : MonoBehaviour
                             podeDormir = false;
                         }
                         else
+                        {
                             GameManager.Instance.FinishDia();
+                        }
                         player.GetComponent<Player>().SetCanMoving();
                         player.GetComponent<Player>().SetViewPlayer(false);
                         playerCama.SetActive(true);
