@@ -104,9 +104,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activeSelf)
+        if(Input.GetKeyDown(KeyCode.Escape) && !rainFinalGame.activeSelf && startDia)
         {
-            PauseMenu(true);
+            if(!pauseMenu.activeSelf)
+                PauseMenu(true);
+            else
+                PauseMenu(false);
         }
 
         switch(dia)
@@ -171,6 +174,7 @@ public class GameManager : MonoBehaviour
 
     public void ExitGame()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(0);
     }
 
@@ -193,6 +197,7 @@ public class GameManager : MonoBehaviour
     }
     public void StartDia1parte2()
     {
+        triggerCafe.ViewFeedCafe(false);
         triggerCama.SetPodeDormir(true);
         triggerCafe.SetProgressFinish(false);
         triggerBanheiro.SetProgressFinish(false);
@@ -222,6 +227,7 @@ public class GameManager : MonoBehaviour
         startDia = true;
         triggerCama.SetPodeDormir(false);
         triggerCafe.SetProgressFinish(false);
+        triggerCafe.ViewFeedCafe(true);
         triggerBanheiro.SetProgressFinish(false);
         triggerTv.ResetDia();
         ViewBtn("Aperte 'E' para acordar.");
@@ -263,6 +269,7 @@ public class GameManager : MonoBehaviour
 
     public void StartDia3()
     {
+        triggerPC.SetPodeTrabalhar(false);
         ResetRelogio();
         alarm.Play();
         finalDia.SetActive(false);
@@ -272,6 +279,7 @@ public class GameManager : MonoBehaviour
         startDia = true;
         triggerCama.SetPodeDormir(false);
         triggerCafe.SetProgressFinish(false);
+        triggerCafe.ViewFeedCafe(true);
         triggerBanheiro.SetProgressFinish(false);
         
         triggerTv.ResetDia();
@@ -296,11 +304,13 @@ public class GameManager : MonoBehaviour
         missoes[dia].GetComponent<MissaoDia>().MissionDia1Parte2();
         triggerCama.SetPodeDormir(true);
         triggerCafe.SetProgressFinish(false);
+        triggerCafe.ViewFeedCafe(false);
         triggerBanheiro.SetProgressFinish(false);
     }
 
     public void StartDia4()
     {
+        triggerPC.SetPodeTrabalhar(false);
         ResetRelogio();
         alarm.Play();
         finalDia.SetActive(false);
@@ -310,6 +320,7 @@ public class GameManager : MonoBehaviour
         startDia = true;
         triggerCama.SetPodeDormir(false);
         triggerCafe.SetProgressFinish(false);
+        triggerCafe.ViewFeedCafe(true);
         triggerBanheiro.SetProgressFinish(false);
 
         triggerTv.ResetDia();
@@ -350,11 +361,14 @@ public class GameManager : MonoBehaviour
 
     public void StartSonoSofa()
     {
-        print("2");
-        triggerSofa.SetPodeLevantar(false);
-        sonoSofa.SetActive(true);
-        triggerJanela.enabled = true;
-        SetRelogio(19);
+        if(!triggerJanela.enabled)
+        {
+            print("2");
+            triggerSofa.SetPodeLevantar(false);
+            sonoSofa.SetActive(true);
+            triggerJanela.enabled = true;
+            SetRelogio(19);
+        }
     }
 
     public void StartAssassinato()

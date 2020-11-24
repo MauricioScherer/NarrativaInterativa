@@ -8,6 +8,7 @@ public class FinalGame : MonoBehaviour
     public GameObject[] assassino;
     public AudioSource audioFinal;
     public AudioSource musicaFinal;
+    public AudioSource somRonco;
 
     public Transform cameraMain;
     public Transform posCamSala;
@@ -35,6 +36,7 @@ public class FinalGame : MonoBehaviour
 
     public void Assassinato()
     {
+        somRonco.Stop();
         audioFinal.Play();
     }
 
@@ -55,5 +57,7 @@ public class FinalGame : MonoBehaviour
     public void btnFinal()
     {
         btnReturn.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
